@@ -1,0 +1,203 @@
+<head>
+    <!-- Font Awesome -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+    <!-- Our CSS -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/navbarStyle.css') }}">
+    <!-- Navbar functions -->
+    <script src="{{ url_for('static',filename='navbar.js') }}"></script>
+</head>
+<nav class="navbar fixed-top">
+    <div class="form-inline">
+        <!-- Logo -->
+        <a class="navbar-brand" href="/home">Barcelona Museums</a>
+
+        <div class="welcome-header">
+            Welcome, user.
+        </div>
+
+
+        
+        <!-- MENU BUTTON -->
+        <div onclick="toggleAccountMenu()" id="menu-nav-button" class="ml-auto">Manage Account
+        </div>
+    </div>
+</nav>
+
+
+
+<!-- FILTER MENU -->
+<div id="filter-menu" class="left-side-menu">
+    <a href="javascript:void(0)" class="closebtn" onclick="toggleFilterMenu()">&times;</a>
+    <form method=POST action='/filtered'>
+        <!-- Apply Filters Button -->
+        <input type="submit" class="offset-3" id="filter-menu-apply-button" value="Apply Filters">
+        <!-- Prop Type -->
+        <button type='button' class="filter-menu-title" onclick="toggleAccordion(this)">Prop Type</button>
+        <div class="panel" id="prop-type-select">
+            <input type="checkbox" id="prop-type-hand" name="prop-type" value="hand"> Hand
+            <br>
+            <input type="checkbox" id="prop-type-personal" name="prop-type" value="personal"> Personal
+            <br>
+            <input type="checkbox" id="prop-type-set" name="prop-type" value="set"> Set
+            <br>
+            <input type="checkbox" id="prop-type-trim" name="prop-type" value="trims"> Trims
+            <br>
+            <input type="checkbox" id="prop-type-set-dressing" name="prop-type" value="set-dressing"> Set Dressing
+            <br>
+            <input type="checkbox" id="prop-type-greens" name="prop-type" value="greens"> Greens
+            <br>
+            <input type="checkbox" id="prop-type-fx" name="prop-type" value="fx"> FX
+        </div>
+        <!-- Costume Type -->
+        <button type='button' class="filter-menu-title" onclick="toggleAccordion(this)">Clothing Type</button>
+        <div class="panel" id="costume-type-select">
+            <input type="checkbox" id="costume-type-outer" name="costume-type" value="outer"> Outerwear
+            <br>
+            <input type="checkbox" id="costume-type-top" name="costume-type" value="top"> Top
+            <br>
+            <input type="checkbox" id="costume-type-pants" name="costume-type" value="pants"> Pants
+            <br>
+            <input type="checkbox" id="costume-type-skirt" name="costume-type" value="skirt"> Skirt
+            <br>
+            <input type="checkbox" id="costume-type-dress" name="costume-type" value="dress"> Dress
+            <br>
+            <input type="checkbox" id="costume-type-under" name="costume-type" value="under"> Underwear
+            <br>
+            <input type="checkbox" id="costume-type-footwear" name="costume-type" value="footwear"> Footwear
+            <br>
+            <input type="checkbox" id="costume-type-other" name="costume-type" value="other"> Other
+            <br>
+        </div>
+        <!-- Time Period -->
+        <button type='button' class="filter-menu-title" onclick="toggleAccordion(this)">Time Period</button>
+        <div class="panel" id="time-period-select">
+            <input type="checkbox" id="time-period-ancient" name="time-period" value="ancient"> Ancient (Greek and Roman)
+            <br>
+            <input type="checkbox" id="time-period-classical" name="time-period" value="classical"> Classical (Renaissance to 1700)
+            <br>
+            <input type="checkbox" id="time-period-early-modern" name="time-period" value="early-modern"> Early Modern (1700-1800)
+            <br>
+            <input type="checkbox" id="time-period-late-modern" name="time-period" value="late-modern"> Late Modern (1800-1900)
+            <br>
+            <input type="checkbox" id="time-period-20th-century" name="time-period" value="20th-century"> 20th Century
+            <br>
+            <input type="checkbox" id="time-period-21st-century" name="time-period" value="21st-century"> 21st Century
+            <br>
+            <input type="checkbox" id="time-period-future" name="time-period" value="future"> Future
+            <br>
+            <input type="checkbox" id="time-period-other" name="time-period" value="other"> Other
+            <br>
+        </div>
+        <!-- Region -->
+        <button type='button' class="filter-menu-title" onclick="toggleAccordion(this)">Region</button>
+        <div class="panel" id="region-select">
+            <input type="checkbox" id="region-north-america" name="region" value="north-america"> N. America
+            <br>
+            <input type="checkbox" id="region-south-america" name="region" value="south-america"> S. America
+            <br>
+            <input type="checkbox" id="region-asia" name="region" value="asia"> Asia
+            <br>
+            <input type="checkbox" id="region-europe" name="region" value="europe"> Asia
+            <br>
+            <input type="checkbox" id="region-africa" name="region" value="africa"> Africa
+            <br>
+            <input type="checkbox" id="region-australia" name="region" value="australia"> Australia
+            <br>
+            <input type="checkbox" id="region-fantasy" name="region" value="other"> Fantasy
+            <br>
+            <input type="checkbox" id="region-sci-fi" name="region" value="other"> Sci-Fi
+            <br>
+            <input type="checkbox" id="region-other" name="region" value="other"> Other
+            <br>
+        </div>
+        <!-- Sex -->
+        <button type='button' class="filter-menu-title" onclick="toggleAccordion(this)">Sex</button>
+        <div class="panel" id="sex-select">
+            <input type="checkbox" id="sex-male" name="sex" value="male"> Male
+            <br>
+            <input type="checkbox" id="sex-female" name="sex" value="female"> Female
+            <br>
+            <input type="checkbox" id="sex-unisex" name="sex" value="unisex"> Unisex
+            <br>
+        </div>
+        <!-- Color -->
+        <button type='button' class="filter-menu-title" onclick="toggleAccordion(this)">Color</button>
+        <div class="panel" id="color-select">
+            <input type="checkbox" id="color-red" name="color" value="red"> Red
+            <br>
+            <input type="checkbox" id="color-orange" name="color" value="orange"> Orange
+            <br>
+            <input type="checkbox" id="color-yellow" name="color" value="yellow"> Yellow
+            <br>
+            <input type="checkbox" id="color-green" name="color" value="green"> Green
+            <br>
+            <input type="checkbox" id="color-blue" name="color" value="blue"> Blue
+            <br>
+            <input type="checkbox" id="color-purple" name="color" value="purple"> Purple
+            <br>
+            <input type="checkbox" id="color-pink" name="color" value="pink"> Pink
+            <br>
+            <input type="checkbox" id="color-brown" name="color" value="brown"> Brown
+            <br>
+            <input type="checkbox" id="color-gray" name="color" value="gray"> Gray
+            <br>
+            <input type="checkbox" id="color-white" name="color" value="white"> White
+            <br>
+            <input type="checkbox" id="color-black" name="color" value="black"> Black
+            <br>
+            <input type="checkbox" id="color-other" name="color" value="other"> Other
+            <br>
+        </div>
+        <!-- Size -->
+        <button type='button' class="filter-menu-title" onclick="toggleAccordion(this)">Size</button>
+        <div class="panel" id="size-select">
+            <input type="checkbox" id="size-xxs" name="size" value="xxs"> &lt;XS
+            <br>
+            <input type="checkbox" id="size-xs" name="size" value="xs"> XS
+            <br>
+            <input type="checkbox" id="size-s" name="size" value="s"> S
+            <br>
+            <input type="checkbox" id="size-m" name="size" value="m"> M
+            <br>
+            <input type="checkbox" id="size-l" name="size" value="l"> L
+            <br>
+            <input type="checkbox" id="size-xl" name="size" value="xl"> XL
+            <br>
+            <input type="checkbox" id="size-xxl" name="size" value="xxl"> &gt;XL
+            <br>
+            <input type="checkbox" id="size-other" name="size" value="other"> Other
+            <br>
+        </div>
+        <!-- Condition -->
+        <button type='button' class="filter-menu-title" onclick="toggleAccordion(this)">Condition</button>
+        <div class="panel" id="condition-select">
+            <input type="checkbox" id="condition-new" name="condition" value="new"> New
+            <br>
+            <input type="checkbox" id="condition-good" name="condition" value="good"> Good
+            <br>
+            <input type="checkbox" id="condition-used" name="condition" value="used"> Used
+            <br>
+            <input type="checkbox" id="condition-poor" name="condition" value="poor"> Poor
+            <br>
+        </div>
+        <!-- Availability -->
+        <button type='button' class="filter-menu-title" onclick="toggleAccordion(this)">Availability</button>
+        <div class="panel" id="availability-select">
+            <input type="checkbox" id="availability-unavailable" name="availability" value="unavailable"> Unavailable
+            <br>
+            <input type="checkbox" id="availability-available" name="availability" value="available"> Available
+            <br>
+        </div>
+    </form>
+</div>
+
+
+<!-- ACCOUNT MENU -->
+<div id="account-menu" class="right-side-menu">
+    <a href="javascript:void(0)" class="closebtn" onclick="toggleAccountMenu()">&times;</a>
+    <a href="/productions">My Tickets</a>
+    <a href="/reservations">My Reviews</a>
+    <a href="/reservations">Admin Request</a>
+    <a href="/logout">Log Out</a>
+    <a href="/logout">Delete My Account</a>
+</div>

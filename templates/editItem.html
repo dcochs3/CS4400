@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Edit Item - UAH Theatre</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>   
+        <!-- Tether -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+        <!-- Our CSS -->
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/addStyle.css') }}">
+    </head>
+    <body>
+        <!--SEARCH BAR-->
+        {% include 'navbar.html' %}
+        <div class="container-fluid">
+            <div class="row">
+                <div class="add-container offset-2 col-8">
+                    <h3>Edit Item</h3>
+                    {% if error %}
+                        <p class="error" style="color:red;"><strong>*</strong> {{ error }}
+                    {% endif %}
+                    <form method=POST action='/posteditItem/{{itemid}}'>
+
+                        <!--ITEM NAME INPUT-->
+                        <div class="form-group">
+                            <div class="input-title">
+                            <h6>Item Name</h6>
+                            </div>
+                            <input type="text" name="itemname" class="form-control" id="input-item-name" placeholder="Item Name" value="{{itemname}}" required>
+                        </div>
+                        
+                        <!--DESCRIPTION INPUT-->
+                        <div class="form-group">
+                            <div class="input-title">
+                            <h6>Description</h6>
+                            </div>
+                            <textarea name="description" class="form-control" id="input-description" placeholder="Description"\> {{description}}</textarea>
+                        </div>
+
+                        <!--PHOTO UPLOAD-->
+                        <div class="input-title">
+                            <h6>Photo Upload</h6>
+                            <div class="input-subtitle">
+                                Upload up to 6 photos.
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 form-group">
+                                <div class="input-title">Front</div>
+                                <input type="file" name="photo1" accept="image/*" class="form-control" id="input-photo-1" placeholder="Photo">
+                                {% if phfront %}
+                                    {% for i in phfront %}
+                                        <img class="form-control" id="photo1" src="data:image/jpeg;base64, {{i}}" alt="photo 1" />
+                                    {% endfor %}
+                                {% else %}
+                                    <img class="form-control" id="photo1" src="#" alt="photo 1" style="display:none;" />
+                                {% endif %}
+
+                            </div>
+                            <div class="col-lg-4 form-group">
+                                <div class="input-title">Back</div>
+                                <input type="file" name="photo2" accept="image/*" class="form-control" id="input-photo-2" placeholder="Photo">
+                                {% if phback %}
+                                    {% for i in phback %}
+                                        <img class="form-control" id="photo2" src="data:image/jpeg;base64, {{i}}" alt="photo 2" />
+                                    {% endfor %}
+                                {% else %}
+                                    <img class="form-control" id="photo2" src="#" alt="photo 2" style="display:none;" />
+                                {% endif %}
+                            </div>
+                            <div class="col-lg-4 form-group">
+                                <div class="input-title">Top</div>
+                                <input type="file" name="photo3" accept="image/*" class="form-control" id="input-photo-3" placeholder="Photo">
+                                {% if phtop %}
+                                    {% for i in phtop %}
+                                        <img class="form-control" id="photo3" src="data:image/jpeg;base64, {{i}}" alt="photo 3" />
+                                    {% endfor %}
+                                {% else %}
+                                    <img class="form-control" id="photo3" src="#" alt="photo 3" style="display:none;" />
+                                {% endif %}
+                            </div>
+                            <div class="col-lg-4 form-group">
+                                <div class="input-title">Bottom</div>
+                                <input type="file" name="photo4" accept="image/*" class="form-control" id="input-photo-4" placeholder="Photo">
+                                {% if phbottom %}
+                                    {% for i in phbottom %}
+                                        <img class="form-control" id="photo4" src="data:image/jpeg;base64, {{i}}" alt="photo 4" />
+                                    {% endfor %}
+                                {% else %}
+                                    <img class="form-control" id="photo4" src="#" alt="photo 4" style="display:none;" />
+                                {% endif %}
+                            </div>
+                            <div class="col-lg-4 form-group">
+                                <div class="input-title">Side1 (Left)</div>
+                                <input type="file" name="photo5" accept="image/*" class="form-control" id="input-photo-5" placeholder="Photo">
+                                {% if phleft %}
+                                    {% for i in phleft %}
+                                        <img class="form-control" id="photo5" src="data:image/jpeg;base64, {{i}}" alt="photo 5" />
+                                    {% endfor %}
+                                {% else %}
+                                    <img class="form-control" id="photo5" src="#" alt="photo 5" style="display:none;" />
+                                {% endif %}
+                            </div>
+                            <div class="col-lg-4 form-group">
+                                <div class="input-title">Side2 (Right)</div>
+                                <input type="file" name="photo6" accept="image/*" class="form-control" id="input-photo-6" placeholder="Photo">
+                                {% if phright %}
+                                    {% for i in phright %}
+                                        <img class="form-control" id="photo6" src="data:image/jpeg;base64, {{i}}" alt="photo 6" />
+                                    {% endfor %}
+                                {% else %}
+                                    <img class="form-control" id="photo6" src="#" alt="photo 6" style="display:none;" />
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- ITEM TYPE INPUT -->
+                        <div class="form-group">
+                            <div class="input-title">
+                            <h6>Item Type</h6>
+                            </div>
+                            <div class="form-control">
+                                <div class="row radio">
+                                    <div class="col-md-4">
+                                        <input type="radio" name="item" value="prop-type"> Prop Type<br>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="radio" name="item" value="costume-type"> Costume Type<br>
+                                    </div>
+                                </div>
+
+                                 <!-- PROP TYPE INPUT -->
+                                <div id="prop-type" class="form-group hide">
+                                    <div class="row radio-title-div">
+                                        <div class="offset-6 col-6 clear-button-div">
+                                            <button type="button" class="clear-button" onclick="clear_radio_butttons('prop')">Clear</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-control">
+                                        <div class="row radio">
+                                            <div class="col-md-4">
+                                                <input class="prop hand" type="radio" name="prop" value="hand"> Hand<br>
+                                                <input class="prop personal" type="radio" name="prop" value="personal"> Personal<br>
+                                                <input class="prop set" type="radio" name="prop" value="set"> Set<br>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <input class="prop trims" type="radio" name="prop" value="trims"> Trims<br>
+                                                <input class="prop setdressing" type="radio" name="prop" value="setdressing"> Set Dressing<br>
+                                                <input type="radio" name="prop" value="greens"> Greens<br>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <input class="prop fx" type="radio" name="prop" value="fx"> FX<br>
+                                                <input class="prop other" type="radio" name="prop" value="other"> Other<br>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- COSTUME TYPE INPUT -->
+                                <div id="costume-type" class="form-group hide">
+                                    <div class="row radio-title-div">
+                                        <div class="offset-6 col-6 clear-button-div">
+                                            <button type="button" class="clear-button" onclick="clear_radio_butttons('costume')">Clear</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-control">
+                                        <div class="row radio">
+                                            <div class="col-md-4">
+                                                <input class="costume outerwear" type="radio" name="costume" value="outerwear"> Outerwear<br>
+                                                <input class="costume tops" type="radio" name="costume" value="tops"> Tops<br>
+                                                <input class="costume pants" type="radio" name="costume" value="pants"> Pants<br>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <input class="costume skirt" type="radio" name="costume" value="skirt"> Skirt<br>
+                                                <input class="costume dress" type="radio" name="costume" value="dress"> Dress<br>
+                                                <input class="costume underwear" type="radio" name="costume" value="underwear"> Underwear<br>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <input class="costume footwear" type="radio" name="costume" value="footwear"> Footwear<br>
+                                                <input class="costume other" type="radio" name="costume" value="other"> Other<br>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TIME PERIOD INPUT -->
+                        <div class="form-group">
+                            <div class="input-title">
+                            <h6>Time Period</h6>
+                            </div>
+                            <div class="form-control">
+                                <div class="row radio">
+                                    <div class="col-md-4">
+                                        <input class="time ancient" type="checkbox" name="time-period" value="ancient">
+                                            Ancient (Greek and Roman) <br>
+                                        <input class="time classical" type="checkbox" name="time-period" value="classical">
+                                            Classical (Renaiisance to 1700) <br>
+                                        <input class="time earlymodern" type="checkbox" name="time-period" value="earlymodern">
+                                            Early Modern (1700-1800) <br>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input class="time latemodern" type="checkbox" name="time-period" value="latemodern"> Late Modern (1800-1900) <br>
+                                        <input class="time 20th" type="checkbox" name="time-period" value="20th"> 20th Century <br>
+                                        <input class="time 21st" type="checkbox" name="time-period" value="21st"> 21st Century <br>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input class="time future" type="checkbox" name="time-period" value="future"> Future<br>
+                                        <input class="time other" type="checkbox" name="time-period" value="other"> Other<br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CULTURE/REGION INPUT -->
+                        <div class="form-group">
+                            <div class="input-title">
+                            <h6>Region   </h6>
+                            </div>
+                            <div class="form-control">
+                                <div class="row radio">
+                                    <div class="col-md-4">
+                                        <input class="culture namerica" type="checkbox" name="culture" value="namerica"> North America <br>
+                                        <input class="culture samerica" type="checkbox" name="culture" value="samerica"> South America <br>
+                                        <input class="culture asia" type="checkbox" name="culture" value="asia"> Asia <br>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input class="culture europe" type="checkbox" name="culture" value="europe"> Europe <br>
+                                        <input class="culture africa" type="checkbox" name="culture" value="africa"> Africa <br>
+                                        <input class="culture australia" type="checkbox" name="culture" value="australia"> Australia <br>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input class="culture fantasy" type="checkbox" name="culture" value="fantasy"> Fantasy <br>
+                                        <input class="culture scifi" type="checkbox" name="culture" value="scifi"> Sci-Fi <br>
+                                        <input class="culture other" type="checkbox" name="culture" value="other"> Other<br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- GENDER INPUT -->
+                        <div class="form-group">
+                            <div class="row radio-title-div">
+                                <div class="input-title col-6">
+                                    <h6>Gender</h6>
+                                </div>
+                                <div class="col-6 clear-button-div">
+                                    <button type="button" class="clear-button" onclick="clear_radio_butttons('gender')">Clear</button>
+                                </div>
+                            </div>
+                            <div class="form-control">
+                                <div class="row radio">
+                                    <div class="col-sm-4">
+                                        <input class="gender male" type="radio" name="gender" value="male"> Male<br>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <input class="gender female" type="radio" name="gender" value="female"> Female<br>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <input class="gender unisex" type="radio" name="gender" value="unisex"> Unisex<br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- COLOR INPUT -->
+                        <div class="form-group">
+                            <div class="input-title">
+                            <h6>Color</h6>
+                            </div>
+                            <div class="form-control">
+                                <div class="radio row">
+                                    <div class="col-6 col-sm-4 col-lg-3">
+                                        <input class="color red" type="checkbox" name="color" value="red"> Red<br>
+                                        <input class="color orange" type="checkbox" name="color" value="orange"> Orange<br>
+                                        <input class="color yellow" type="checkbox" name="color" value="yellow"> Yellow<br>
+                                    </div>
+                                    <div class="col-6 col-sm-4 col-lg-3">
+                                        <input class="color green" type="checkbox" name="color" value="green"> Green<br>
+                                        <input class="color blue" type="checkbox" name="color" value="blue"> Blue<br>
+                                        <input class="color purple" type="checkbox" name="color" value="purple"> Purple<br>
+                                    </div>
+                                    <div class="col-6 col-sm-4 col-lg-3">
+                                        <input class="color pink" type="checkbox" name="color" value="pink"> Pink<br>
+                                        <input class="color brown" type="checkbox" name="color" value="brown"> Brown<br>
+                                        <input class="color gray" type="checkbox" name="color" value="gray"> Gray<br>
+                                    </div>
+                                    <div class="col-6 col-sm-4 col-lg-3">
+                                        <input class="color white" type="checkbox" name="color" value="white"> White<br>
+                                        <input class="color black" type="checkbox" name="color" value="black"> Black<br>
+                                        <input class="color other" type="checkbox" name="color" value="other"> Other<br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SIZE INPUT -->
+                        <div class="form-group">
+                            <div class="row radio-title-div">
+                                <div class="input-title col-6">
+                                    <h6>Size</h6>
+                                </div>
+                                <div class="col-6 clear-button-div">
+                                    <button type="button" class="clear-button" onclick="clear_radio_butttons('size')">Clear</button>
+                                </div>
+                            </div>
+                            <div class="form-control">
+                                <div class="row radio">
+                                    <div class="col-md-4">
+                                        <input class="size xxs" type="radio" name="size" value="xxs"> &lt;XS<br>
+                                        <input class="size xs" type="radio" name="size" value="xs"> XS<br>
+                                        <input class="size s" type="radio" name="size" value="s"> S<br>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input class="size m" type="radio" name="size" value="m"> M<br>
+                                        <input class="size l" type="radio" name="size" value="l"> L<br>
+                                        <input class="size xl" type="radio" name="size" value="xl"> XL<br>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input class="size xxl" type="radio" name="size" value="xxl"> &gt;XL<br>
+                                        <input class="size other" type="radio" name="size" value="other"> Other<br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CONDITION INPUT -->
+                        <div class="form-group">
+                            <div class="row radio-title-div">
+                                <div class="input-title col-6">
+                                    <h6>Condition</h6>
+                                </div>
+                                <div class="col-6 clear-button-div">
+                                    <button type="button" class="clear-button" onclick="clear_radio_butttons('condition')">Clear</button>
+                                </div>
+                            </div>
+                            <div class="form-control">
+                                <div class="row radio">
+                                    <div class="col-6 col-md-3">
+                                        <input class="condition new" type="radio" name="condition" value="new"> New<br>
+                                    </div>
+                                    <div class="col-6 col-md-3">
+                                        <input class="condition good" type="radio" name="condition" value="good"> Good<br>
+                                    </div>
+                                    <div class="col-6 col-md-3">
+                                        <input class="condition used" type="radio" name="condition" value="used"> Used<br>
+                                    </div>
+                                    <div class="col-6 col-md-3">
+                                        <input class="condition poor" type="radio" name="condition" value="poor"> Poor<br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Navigate back to home page/ Trigger the confirmation modal -->
+                        <button type="submit" name="cancel-button" class="btn" id="cancel-button" value="Cancel">Cancel</button>
+                        <!--ADD ITEM BUTTON-->
+                        <button type="submit" name="add-item-button" class="btn offset-md-1" id="add-item-button" value="{{itemid}}">Save Changes</button>
+                    </form>
+                    <!-- Cancel Confirmation Modal -->
+                    <div class="modal fade" id="cancel-modal" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Cancel Confirmation</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body" style="text-align: left;">
+                                    You have unsaved changes on this page. Do you want to leave this page and discard your changes or stay on this page?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Stay & Continue to edit</button>
+                                    <button type="submit" class="btn btn-primary" id="cancel-confirmed">Discard changes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+<script>
+    $(document).ready(function() {
+        $('#cancel-confirmed').click(function() {
+            location.href = '/item/{{itemid}}';
+        });
+        $( '#cancel-button' ).click(function() {
+            $('#cancel-modal').modal('show');
+            return false;
+        });
+
+        //********  pre-filled prop type  ********
+        if ('{{itemtype|first}}' === 'prop') {
+            $("input[value='prop-type']").attr('checked', true);
+            $("#prop-type").removeClass('hide');
+            $('.prop.{{itype|first}}').attr('checked', true);
+        }
+
+        //********  pre-filled costume type  ********
+        if ('{{itemtype|first}}' === 'costume') {
+            $("input[value='costume-type']").attr('checked', true);
+            $("#costume-type").removeClass('hide');
+            $('.costume.{{itype|first}}').attr('checked', true);
+        }
+
+        display_checkbox('time', '{{timeperiod|first}}');
+        display_checkbox('culture', '{{culture|first}}');
+        display_radio_button('gender', '{{sex|first}}');
+        display_checkbox('color', '{{color|first}}');
+        display_radio_button('size', '{{size|first}}');
+        display_radio_button('condition', '{{condition|first}}');
+
+        // display the photos after selecting the files
+        $(":file").change(function (e) {
+            if (this.files && this.files[0]) {
+                var reader = new FileReader();
+                $('#'+ $(this).attr('name')).css('display','initial');
+                var img = $('#'+ $(this).attr('name'));
+                reader.onload = function (e) {
+                    img.attr('src', e.target.result);
+                };
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+
+        toggle_prop_and_costume();
+    });
+
+    function display_radio_button(characteristic, value) {
+        if (value !== 'None') {
+            $('.' + characteristic + '.' + value).attr('checked', 'true');
+        }
+    }
+
+    function display_checkbox(characteristic, value) {
+        if (value !== '{}') {
+            // format from db: value = {red,green,blue}
+            value = value.split('{').join('').split('}').join('').split(','); // convert to array of string: value = ['red','green','blue']
+            value.forEach(function(c) {
+                $('.' + characteristic + '.' + c).attr('checked', 'true');
+            });
+        }
+    }
+
+    function clear_radio_butttons(input_name) {
+        $('input[name=' + input_name + ']:checked').prop('checked',false);
+    }
+
+    function toggle_prop_and_costume() {
+        $("input[name='item']").change(function() {
+            $('#' + $(this).val()).removeClass('hide');
+            if ($(this).val() === 'prop-type') {
+                $('#costume-type').addClass('hide');
+                clear_radio_butttons('costume');
+            } else {
+                $('#prop-type').addClass('hide');
+                clear_radio_butttons('prop');
+            }
+        });
+    }
+</script>

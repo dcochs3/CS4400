@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Login - UAH Theatre</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+        <!-- Tether -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+        <!-- Our CSS -->
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/welcomeStyle.css') }}">
+    </head>
+    <body>
+        <div class="container-fluid">
+            <!-- LOGIN HEADER ROW -->
+            <div class="login-header row">
+                <div class="col-12">
+                    <h1>Thracker</h1>
+                    <h3>A Digital Theatre Inventory</h3>
+                </div>
+            </div>
+            <!-- LOGIN FORM ROW -->
+            <div class="row">
+                <div class="login-container offset-2 col-8 offset-md-4 col-md-4">
+                    <h3>Forgot Password</h3>
+                    {% if error %}
+                        <p class="error" style="color:red;"><strong>*</strong> {{ error }}
+                    {% endif %}
+                    <form method=POST action='/forgotpass'>
+                        <!--EMAIL INPUT-->
+                        <div class="form-group">
+                            <input type="text" name="email" class="form-control" id="input-email" placeholder="Email">
+                        </div>
+                        <!--LOG IN BUTTON-->
+                        <!-- <button onclick="location.href='home.html'" class="btn" id="loginButton">Login</button> -->
+                        <button type="submit" class="btn" id="login-button">Send Email</button>
+                    </form>
+                    <div id="nav-button-div">
+                        <!--Go to Register New Account Page-->
+                        <a href="register" style="float:right;">New User? Sign-up!</a>
+                        <!--Use app as Guest-->
+                        <a href="/" style="float:left;">Back to Login</a>
+                        <br/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+

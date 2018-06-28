@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Item Detail - UAH Theatre</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+        <!-- Tether -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+        <!-- Our CSS -->
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/itemDetailStyle.css') }}">
+    </head>
+    <body>
+        <!--SEARCH BAR-->
+        {% include 'navbar.html' %}
+        <div class="item-detail-container container-fluid">
+            <!-- ITEM NAME -->
+            <div class="row">
+                <div class="col-12">
+                    {% if error %}
+                        <p class="error" style="color:red;"><strong>*</strong> {{ error }}
+                    {% endif %}
+                    <p class="item-name">{{ itemname | first }}</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- IMAGES -->
+                <div class="col-md-6">
+                    <div id="photo-carousel" class="carousel slide item-image row" data-ride="carousel">
+                        <!-- Indicators -->
+                        {% if phcount > 1 %}
+                        <ol class="carousel-indicators">
+                            <li data-target="#photo-carousel" data-slide-to="0" class="active"></li>
+                            {% for i in (1, phcount) %}
+                                <li data-target="#photo-carousel" data-slide-to="{{i}}"></li>
+                            {% endfor %}
+                        </ol>
+                        {% endif %}
+                        <!-- Left control -->
+                        {% if phcount > 1 %}
+                        <a class="carousel-control-prev col-1" href="#photo-carousel" role="button" data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        {% endif %}
+
+                        <!-- Wrapper for slides -->
+                        <div class="carousel-inner col-10">
+                            {% if phcount == 0 %}
+                                <div class="carousel-item active">
+                                    <img id="item-preview" src="{{ url_for('static',filename='images/noimage.png') }}" atl="no photo available"/>
+                                </div>
+                            {% endif %}
+
+                            {% if phfront %}
+                                <div class="carousel-item">
+                                    {% for i in phfront %}
+                                        <img id="item-preview" src="data:image/jpeg;base64, {{i}}" atl="Front"/>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+
+                            {% if phback %}
+                                <div class="carousel-item">
+                                    {% for i in phback %}
+                                        <img id="item-preview" src="data:image/jpeg;base64, {{i}}" atl="Back"/>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+
+                            {% if phtop %}
+                                <div class="carousel-item">
+                                    {% for i in phtop %}
+                                        <img id="item-preview" src="data:image/jpeg;base64, {{i}}" atl="Top"/>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+
+                            {% if phbottom %}
+                                <div class="carousel-item">
+                                    {% for i in phbottom %}
+                                        <img id="item-preview" src="data:image/jpeg;base64, {{i}}" atl="Bottom"/>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+
+                            {% if phright %}
+                                <div class="carousel-item">
+                                    {% for i in phright %}
+                                        <img id="item-preview" src="data:image/jpeg;base64, {{i}}" atl="Right"/>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+
+                            {% if phleft %}
+                                <div class="carousel-item">
+                                    {% for i in phleft %}
+                                        <img id="item-preview" src="data:image/jpeg;base64, {{i}}" atl="Left"/>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <!-- Right control -->
+                        {% if phcount > 1 %}
+                        <a class="carousel-control-next col-1" href="#photo-carousel" role="button" data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="col-md-6 item-detail-text">
+                    <!-- RESERVATION -->
+                        {%if iscurrentlyreserved %}
+                        <p style="color:red;" style="font-size:160%;"> Currently reserved: {{r_start}} to {{r_end}} by {{email}} </p>
+                        {% endif %}
+
+                    <div class="reservation-and-folder row">
+                        <div class="reservation col-xl-6">
+                            {%if delete | first %}
+                                <button class="btn" id="reserve-item-button" button type="submit" disabled value={{itemid}}>Reserve Item</button>
+                            {% endif %}
+                            {% if not delete|first %}
+                                <form method=POST action='/setReservation/{{itemid}}'>
+                                    <button class="btn" id="reserve-item-button" type="submit" value={{itemid}}>Reserve Item</button>
+                                </form>
+                            {% endif %}
+                        </div>
+
+                        <!-- PRODUCTION FOLDERS -->
+                        <div class="prod-folder col-xl-6">
+                            {%if delete | first %}
+                                <button class="btn" id="prod-folder-button" button type="submit" disabled value={{itemid}}>Add to Production Folder</button>
+                            {% endif %}
+                            {% if not delete|first %}
+                                <form method=POST action='/editFolders/{{itemid}}'>
+                                    <button class="btn" id="prod-folder-button" type="submit" value={{itemid}}>Add to Production Folder</button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <!-- ITEM DETAILS -->
+                    <div class="item-text row">
+                        <div class="col-12">
+                            <p>Barcode: {{itemid}}</p>
+                            <p>Condition: {{condition | first}}</p>
+                            <p>Gender: {{sex | first}}</p>
+                            <p>Size: <span style="text-transform: uppercase;">{{size | first}}</span></p>
+                            <p id="color">Color: </p>
+                            <p id="time" style="text-transform: capitalize">Time Period: </p>
+                            <p id="culture" style="text-transform: capitalize">Region: </p>
+                            {% if "setdressing" in itype[0] %}
+                                <p>Clothing Type: set dressing</p>
+                            {% else %}
+                                <p>Clothing Type: {{itype | first}}</p>
+                            {% endif %}
+                            <p>Item Type: {{itemtype | first}}</p>
+                            <p>Description: {{description | first}}</p>
+                        </div>
+                    </div>
+
+                    <!-- EDITING AND DELETING -->
+                    <div class="item-action row">
+                        <div class="col-12">
+                            {%if delete | first %}
+                            <p>Deletion Pending</p>
+                            {% endif %}
+                        </div>
+                        <div class="col-lg-6">
+                        {%if delete | first %}
+                            <button class="btn" id="edit-item-button" button type="submit" disabled value={{itemid}}>Edit</button>
+                        {% endif %}
+                        {% if not delete|first %}
+                            <form method=POST action='/editItem/{{itemid}}'>
+                                <button class="btn" id="edit-item-button" type="submit" value={{itemid}}>Edit</button>
+                            </form>
+                        {% endif %}
+                        </div>
+                            {% if delete|first %}
+                        <div class="col-lg-6">
+                            <button class="btn" id="delete-item-button" button type="submit" disabled>Delete Item</button>
+                        </div>
+                            {% endif %}
+                            {% if not delete|first %}
+                        <div class="col-lg-6">
+                            <button class="btn" id="delete-item-button" type="submit">Delete Item</button>
+                        </div>
+                            {% endif %}
+                    </div>
+                    <!-- Deletion Confirmation Modal -->
+                    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Deletion Confirmation</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body" style="text-align: left;">
+                                    Are you sure you want to delete this item?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                    <form method=POST action='/deleteItem/{{itemid}}'>
+                                        <button class="btn btn-primary" id="delete-confirmed" type="submit" value={{itemid}}>Delete</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+<script>
+    $(document).ready(function() {
+        $( '#delete-item-button' ).click(function() {
+            $('#deleteModal').modal('show');
+        });
+
+        append_db_format_array('{{color | first}}', 'color');
+        append_db_format_array('{{timeperiod | first}}', 'time');
+        append_db_format_array('{{culture | first}}', 'culture');
+
+        $('.carousel').carousel({
+            interval: 0
+        });
+
+        if ({{phcount}} > 0) {
+            $('.carousel-inner div:first-child').addClass('active');
+        }
+    });
+
+    function append_db_format_array(array_string, characteristic_id) {
+        if (array_string === 'None') {
+            $('#' + characteristic_id).append("N/A");
+        } else {
+            // format of array_string from db: array_string = {a,b,c}
+            array_string = array_string.split('{').join('').split('}').join('').replace(',', ', '); //convert to a string: array_string = "a, b, c"
+            if (characteristic_id === 'time') {
+                array_string = rename_timeperiod(array_string);
+            }
+
+            if (characteristic_id === 'culture') {
+                array_string = rename_culture(array_string);
+            }
+
+            $('#' + characteristic_id).append(array_string);
+        }
+    }
+
+    function rename_timeperiod(time) {
+        return time.replace('earlymodern', 'early modern').replace('latemodern', 'late modern').replace('20th', '20th century').replace('21st', '21st century');
+    }
+
+    function rename_culture(culture) {
+        return culture.replace('namerica', 'north america').replace('samerica', 'south america').replace('scifi', 'sci-fi');
+    }
+</script>

@@ -1,0 +1,173 @@
+/* Container holding all the filter options */
+.panel {
+    padding: 0 18px;
+    color: color;
+    background-color: #171717;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.1s;
+}
+
+/* Main Navigation Bar color */
+.navbar {
+    background: #0077C8;
+}
+
+/* "Barcelona Museums" */
+.navbar-brand {
+    font-weight: 500;
+    color: white;
+    transition: 0.2s;
+}
+@media screen and (min-width: 612px) {
+    .navbar-brand {
+        margin-right: 50px !important;
+    }
+}
+.navbar-brand:hover {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+
+.welcome-header {
+    font-weight: 500;
+    color: white;
+    transition: 0.2s;
+}
+
+/*Text input part of search bar*/
+.navbar #searchBar {
+    background-color: white;
+    border: none;
+    color: black;
+    
+    width: 20vw;
+    transition: 0.2s;
+}
+.navbar #searchBar:focus {
+    -webkit-box-shadow: 5px 7px 30px -7px rgba(0,0,0,0.5);
+    -moz-box-shadow: 5px 7px 30px -7px rgba(0,0,0,0.5);
+    box-shadow: 5px 7px 30px -7px rgba(0,0,0,0.5);
+    width: 30vw !important;
+}
+.navbar #searchBar::placeholder {
+    color: #a8a8a8;
+}
+/*Search "Go" button*/
+.navbar .input-group .input-group-btn button {
+    background-color: #0077C8;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.navbar .input-group .input-group-btn button:hover {
+    background-color: #FDDA24;
+}
+/*Edit Filters button*/
+.navbar .input-group .search-panel button {
+    border-bottom: none;
+    background-color: #959595;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.navbar .input-group .search-panel button:hover {
+    background-color: #FDDA24;
+}
+/* User menu button*/
+#menu-nav-button {
+    border-radius: 5px;
+    padding: 4px 10px;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+    background-color: rgba(255, 255, 255, 0.35);
+}
+#menu-nav-button:hover {
+    background-color: #FDDA24;
+    color: white;
+    border-color: #FDDA24;
+    border-radius: 5px;
+}
+/*Add item button*/
+#add-item-page-button {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    padding: 4px 10px;
+    text-align: center;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+    border-radius: 5px;
+}
+#add-item-page-button:hover {
+    border-color: rgba(0, 0, 0, 0);
+    border-radius: 5px;
+    background-color: #FDDA24;
+}
+/*How the add item and user menu button look on small screen*/
+@media screen and (max-width: 575px) {
+    #menu-nav-button, #add-item-page-button {
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+}
+/* Gap before add item button on larger screens */
+@media screen and (min-width: 576px) {
+    #add-item-page-button {
+        margin-left: 20px;
+    }
+}
+
+
+/*-------------------SIDE MENUS-------------------*/
+.right-side-menu, .left-side-menu {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 9999;
+    top: 0;
+    background-color: #171717;
+    overflow-x: hidden;
+    transition: 0.3s;
+    padding-top: 60px;
+}
+.right-side-menu {
+    right: 0;
+}
+.left-side-menu {
+    left: 0;
+}
+.right-side-menu a, .left-side-menu a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 18px;
+    color: white;
+    display: block;
+    transition: 0.2s;
+}
+.right-side-menu .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+.left-side-menu .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+.right-side-menu a:hover, .left-side-menu a:hover, .offcanvas a:focus{
+    text-decoration: none;
+    color: #4f6aa8;
+}
+
+@media screen and (max-height: 450px) {
+  .right-side-menu, .left-side-menu {padding-top: 15px;}
+  .right-side-menu a, .left-side-menu a {font-size: 18px;}
+}
+.left-side-menu {
+    color: white;
+}

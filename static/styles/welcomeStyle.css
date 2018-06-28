@@ -1,0 +1,81 @@
+body {
+    background-color: #fafcfe;
+}
+
+/* Top Header */
+.login-header {
+    padding: 4vh;
+    background-color: #0077C8;
+    color: white;
+    text-align: center;
+}
+
+/* The Main Input Box */
+.login-container {
+    margin-top: 5vh;
+    padding: 3vh;
+    display: inline-block;
+    background-color: #FFF;
+    border-radius: 2px;
+    box-shadow: 0px 0px 6px #aaaaaa;
+}
+
+/* The title of the main input box */
+.login-container h3 {
+    color: #6a6a6a;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.login-container form {
+    display:inline-block; 
+    text-align:center; 
+    width:100%;
+}
+
+/* Textbox inputs */
+#input-email, 
+#input-password,
+#input-password-confirmed,
+#input-card-number {
+    width: 100%;
+}
+
+#input-expr-month,
+#input-expr-year,
+#input-card-sec-code {
+    width: 50%;
+}
+
+.input-title {
+    text-align: left;
+}
+
+.column {
+    float:left;
+    width:50%;
+}
+
+#login-button, #register-button {
+    width: 100%;
+    font-size: 16px;
+    background-color: #FDDA24;
+    margin-top: 3vh;
+    margin-bottom: 4vh;
+}
+#login-button:hover, #register-button:hover {
+    background-color: #ffff4c;
+    cursor: pointer;
+}
+
+@media screen and (min-width:480px) and (max-width:800px) {
+    #login-button, #register-button, #nav-button-div button {
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width:479px) {
+    #login-button, #register-button, #nav-button-div a {
+        font-size: 10px;
+    }
+}

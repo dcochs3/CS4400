@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Home - Barcelona Museums Ticketing & Review System</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+        <!-- Tether -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+        <!-- Our CSS -->
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/addStyle.css') }}">
+
+        <!-- Navbar functions -->
+        <script src="{{ url_for('static',filename='navbar.js') }}"></script>
+
+    </head>
+    <body>
+        <!--SEARCH BAR-->
+        {% include 'navbar.html' %}
+        <div class="container-fluid">
+            <div class="row">
+                <div class="add-container offset-2 col-8">
+                    <h3>Select a Museum</h3>
+                    {% if error %}
+                        <p class="error" style="color:red;"><strong>*</strong> {{ error }}
+                    {% endif %}
+
+                    <form method=POST action='/postselectSpecificMuseum' enctype=multipart/form-data>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <input type="museumname" name="museumname" class="form-control" id="input-mus-name" placeholder="Search by Museum Name">
+                                </div>
+                                OR
+                                <div class="col-md-5">
+
+                                <!-- INSERT DROP DOWN MENU OF MUSEUMS HERE -->
+
+                                </div>
+                                <div class="col-md-1">
+                                    <span class="form-group">
+                                        <button class="btn" type="submit" name="search-button" id="search-button" value="Search">Go</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+
+                    <form method=POST action='/postselectAllMuseums' enctype=multipart/form-data>
+                        <div class="form-group">
+                            <!--View all Museums BUTTON-->
+                            <button type="submit" name="all-museums-button" class="btn" id="all-museums-button" value="Add">View All Museums</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+
+<script>
+    $(document).ready(function() {
+        $('#cancel-confirmed').click(function() {
+            location.href = 'home';
+        });
+        $( '#cancel-button' ).click(function() {
+            $('#cancel-modal').modal('show');
+            return false;
+        });
+
+        // display the photos after selecting the files
+        $(":file").change(function (e) {
+            if (this.files && this.files[0]) {
+                var reader = new FileReader();
+                $('#'+ $(this).attr('name')).css('display','initial');
+                var img = $('#'+ $(this).attr('name'));
+                reader.onload = function (e) {
+                    img.attr('src', e.target.result);
+                };
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+
+        toggle_prop_and_costume();
+    });
+
+    function clear_radio_butttons(input_name) {
+        $('input[name=' + input_name + ']:checked').prop('checked',false);
+    }
+
+    function toggle_prop_and_costume() {
+        $("input[name='item']").change(function() {
+            $('#' + $(this).val()).removeClass('hide');
+            if ($(this).val() === 'prop-type') {
+                $('#costume-type').addClass('hide');
+                clear_radio_butttons('costume');
+            } else {
+                $('#prop-type').addClass('hide');
+                clear_radio_butttons('prop');
+            }
+        });
+    }
+</script>

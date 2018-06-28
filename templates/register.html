@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Register - Barcelona Museums Ticketing & Review System</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+        <!-- Tether -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+        <!-- Our CSS -->
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/welcomeStyle.css') }}">
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="login-header row">
+                <div class="col-12">
+                    <h1>Barcelona Museums</h1>
+                    <h3>Ticketing & Review System</h3>
+                </div>
+            </div>
+            <!-- LOGIN FORM ROW -->
+            <div class="row">
+                <div class="login-container offset-2 col-8 offset-md-4 col-md-4">
+                    <h3>New User Registration</h3>
+                    {% if error %}
+                        <p class="error" style="color:red;"><strong>*</strong> {{ error }}
+                    {% endif %}
+                    <form method=POST action='/postregister'>
+                        <div class="form-group">
+                            <input type="email" name="email" class="form-control" id="input-email" placeholder="Email">
+                        </div>
+
+                        <!--PASSWORD INPUT-->
+                        <div class="form-group">
+                            <input type="password"  name="password" class="form-control" id="input-password" placeholder="Password">
+                        </div>            
+                        <div class="form-group">
+                            <input type="password" class="form-control" id="input-password-confirmed" placeholder="Confirm Password">
+                        </div>
+
+                        <!--CREDIT CARD INFO INPUT-->
+                        <div class="form-group">
+                            <input type="cardnumber"  name="cardnumber" class="form-control" id="input-card-number" placeholder="Credit Card Number">
+                        </div>            
+
+                        <div class="form-group">
+                            <div class="input-title">
+                                <h6>Credit Card Expiration Date</h6>
+                            </div>
+                            <div class="form-group">
+                            <div class="column">
+                            <input type="exprmonth" name="exprmonth" class="form-control" id="input-expr-month" placeholder="Month">
+                            </div>
+                            <div class="column">
+                            <input type="expryear" name="expryear" class="form-control" id="input-expr-year" placeholder="Year">
+                            </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                        </br>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="input-title">
+                                <h6>Credit Card Security Code</h6>
+                            </div>
+                            <div class="column">
+                            <input type="seccode"  name="seccode" class="form-control" id="input-card-sec-code" placeholder="Code">
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn" id="register-button">Register</button>
+                        <div id="nav-button-div">
+                            <!--Go to Normal login page-->
+                            <a href="/">Returning User?</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+

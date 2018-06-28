@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>My Reservations - UAH Theatre</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+        <!-- Tether -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+        <!-- Our CSS -->
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/addStyle.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/folderStyle.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/modalStyle.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/reservationStyle.css') }}">
+        <!-- Misc Links for Calendar Function -->
+        <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+        <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+        <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+        <!-- Our Calendar functions -->
+        <script src="{{ url_for('static',filename='calendar.js') }}"></script>
+    </head>
+    <body id="my-reservations-page-body">
+        <!--NAV BAR-->
+        {% include 'navbar.html' %}
+        <div class="container-fluid">
+            <div class="row">
+                <div class="add-container offset-1 col-10 offset-md-2 col-md-8">
+                    <h3>My Reservations</h3>
+                    {% if error %}
+                        <p class="error" style="color:red;"><strong>*</strong> {{ error }}
+                    {% endif %}
+                    
+                    <div class="form-group">
+                        <!-- CURRENT RESERVATIONS-->
+                        <ul id="current-reservations" class="list-group">
+                            Current Reservations
+                            {% for reservation in current_user_reservations %}
+                            <li class="row list-group-item list-group-item-action">
+                                <div class="col-sm-4">
+                                    <!--DELETE RESERVATION BUTTON-->
+                                    <button type="button" class="icon-button delete-folder" data-tooltip="tooltip" data-placement="top" data-toggle="modal" data-target="#delete-modal" onclick="get_delete_name('{{reservation[0]}} {{reservation[1]}} {{reservation[2]}} {{reservation[3]}}');"
+                                    title="Delete Reservation">
+                                        {% include 'icon/delete.svg' %}
+                                    </button>
+                                    <!-- LINK TO ITEM'S DETAIL PAGE-->
+                                    <a href="/item/{{reservation[1]}}" style="margin-left: 15px;">{{reservation[5]}}</a>
+                                </div>
+                                <div class="col-sm-8">
+                                    <p>{{reservation[2]}} - {{reservation[3]}}</p>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        
+                        <!-- UPCOMING RESERVATIONS -->
+                        <ul id="upcoming-reservations" class="list-group">
+                            Upcoming Reservations
+                            {% for reservation in future_user_reservations %}
+                            <li class="row list-group-item list-group-item-action">
+                                <div class="col-sm-4">
+                                    <!--DELETE RESERVATION BUTTON-->
+                                    <button type="button" class="icon-button delete-folder" data-tooltip="tooltip" data-placement="top" data-toggle="modal" data-target="#delete-modal" onclick="get_delete_name('{{reservation[0]}} {{reservation[1]}} {{reservation[2]}} {{reservation[3]}}');"
+                                    title="Delete Reservation">
+                                        {% include 'icon/delete.svg' %}
+                                    </button>
+                                    <!-- LINK TO ITEM'S DETAIL PAGE-->
+                                    <a href="/item/{{reservation[1]}}" style="margin-left: 15px;">{{reservation[5]}}</a>
+                                </div>
+                                <div class="col-sm-8">
+                                    <!-- PICK DATE -->
+                                    <input class="calendar-picker-input {{reservation[1]}}" type="text" readonly="true" name="daterange" value="{{reservation[2]}} - {{reservation[3]}}" />
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        
+                        <!-- PAST RESERVATIONS -->
+                        <ul id="past-reservations" class="list-group">
+                            Past Reservations
+                            {% for reservation in past_user_reservations %}
+                            <li class="row list-group-item list-group-item-action">
+                                <div class="col-sm-4">
+                                    <!--DELETE RESERVATION BUTTON-->
+                                    <button type="button" class="icon-button delete-folder" data-tooltip="tooltip" data-placement="top" data-toggle="modal" data-target="#delete-modal" onclick="get_delete_name('{{reservation[0]}} {{reservation[1]}} {{reservation[2]}} {{reservation[3]}}');"
+                                    title="Delete Reservation">
+                                        {% include 'icon/delete.svg' %}
+                                    </button>
+                                    <!-- LINK TO ITEM'S DETAIL PAGE-->
+                                    <a href="/item/{{reservation[1]}}" style="margin-left: 15px;">{{reservation[5]}}</a>
+                                </div>
+                                <div class="col-sm-8">
+                                    <p>{{reservation[2]}} - {{reservation[3]}}</p>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul> 
+                    </div>
+
+                    <!-- Deletion Confirmation Modal -->
+                    <div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Deletion Confirmation</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body" style="text-align: left;">
+                                    Are you sure you want to delete this reservation?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                <!-- TO DO: delete the reservation-->
+                                <form method=POST action='/deleteReservation'>
+                                        <button class="btn btn-primary" id="delete-confirmed" type="submit">Delete</button>
+                                        <!-- The input field contains a string of info which is passed to backend when delete button (above) is clicked. String format: "email itemid start end".
+                                            use .split(' ') in backend to convert string into an array of 4 elements.-->
+                                        <input type="hidden" name="delreservation" class="form-control" id="deleted-reservation" >
+                                </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        // Tooltip for the icon buttons
+        $('[data-tooltip="tooltip"]').tooltip({trigger: "hover"});
+        store_original_date_future_reservations();
+
+        // Give id for each future reservation
+        $('#upcoming-reservations input[name="daterange"]').each(function(index, input) {
+            $(input).attr('id', 'future_' + index);
+        });
+
+        var all = {{all_reservations|safe}};
+        greyout_taken_dates_in_my_reservations(all); // in calendar.js
+    });
+
+    function get_delete_name(reservation_info) {
+        $('#delete-modal').on('show.bs.modal', function(e) {
+            $(this).find("input").val(reservation_info);
+        });
+    }
+</script>

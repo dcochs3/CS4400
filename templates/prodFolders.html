@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Production Folders - UAH Theatre</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+        <!-- Tether -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+        <!-- Our CSS -->
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/addStyle.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/folderStyle.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/modalStyle.css') }}">
+        <!-- Production Folder functions -->
+        <script src="{{ url_for('static',filename='prodFolders.js') }}"></script>
+    </head>
+    <body>
+        <!--NAV BAR-->
+        {% include 'navbar.html' %}
+        <div class="container-fluid">
+            <div class="row">
+                <div class="add-container offset-1 col-10 offset-md-2 col-md-8">
+                    <h3>Productions</h3>
+                    {% if error %}
+                        <p class="error" style="color:red;"><strong>*</strong> {{ error }}
+                    {% endif %}
+
+                    <div style="text-align:center;">
+                        <div class="form-group">
+                            <ul class="list-group">
+                                <!-- itemsinfolder: 0:Foldername, 1:folderid, 2:[(0:Itemname, 1:itemid, 2:photo1), (Itemname2, itemid2, photo2)]), (Foldername2, folderid2, [(Itemname, itemid), (Itemname2, itemid2)])] -->
+                                {% for folder in itemsinfolder %}
+                                <li id="folder_{{folder[0]}}" class="folder list-group-item list-group-item-action flex-column">
+                                    <div class="d-flex w-100 justify-content-between" style="text-align:left;">
+                                        <p>{{folder[0]}}</p>
+                                        <div style="min-width:51px; margin-left:13px;">
+                                            <div style="min-width:51px; margin-left:13px;">
+                                                <!-- EDIT NAME BUTTON-->
+                                                <button type="button" class="icon-button rename-folder" data-toggle="modal" data-target="#rename-modal" onclick="activate_rename_field('{{folder[0]}}');"  data-tooltip="tooltip" data-placement="top" title="Rename Folder">
+                                                    {% include 'icon/pencil.svg' %}
+                                                </button>
+                                                <!-- DELETE FOLDER BUTTON -->
+                                                 <button type="button" class="icon-button delete-folder" data-toggle="modal" data-target="#delete-modal" onclick="get_delete_name('{{folder|first}}');" style="margin-left: 5px;" data-tooltip="tooltip" data-placement="top" title="Delete Folder">
+                                                     {% include 'icon/delete.svg' %}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button onclick="toggleAccordion(this)"><i class="fas fa-angle-down"></i></button>
+                                    <div class="folder-contents row">
+                                        {% for item in folder[2] %}
+                                        <div class="col-6 col-md-4" onclick="window.open('item/{{item[1]}}');" >
+                                            <div class="item">
+                                                {% if item[2] %}
+                                                    {% for i in item[2] %}
+                                                        <img src="data:image/jpeg;base64, {{i}}"/>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <img src="https://upload.wikimedia.org/wikipedia/commons/1/15/No_image_available_600_x_450.svg">
+                                                {% endif %}
+                                                <p>{{item[0]}}</p>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+
+                        <!-- CREATE NEW FOLDER BUTTON -->
+                        <button type="button" name="create-folder-button" class="btn" id="create-folder-button" value="Create" data-toggle="modal" data-target="#add-folder-modal">Create New Production</button>
+                    </div>
+
+                    <!-- Deletion Confirmation Modal -->
+                    <div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Deletion Confirmation</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body" style="text-align: left;">
+                                    Are you sure you want to delete this production?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                 <form method=POST action='/deleteFolder/{{fname}}'>
+                                        <button class="btn btn-primary" id="delete-confirmed" type="submit">Delete</button>
+                                            <input type="hidden" name="foldername" class="form-control" id="deleted-foldername" >
+                                </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Folder rename modal. Either this or inline editing (the <input> above) -->
+                    <div class="modal fade" id="rename-modal" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Rename the Production</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+
+                                <form method=POST action="{{ url_for('renameFolder') }}">
+                                    <div class="modal-body" style="text-align: left;">
+                                        <div class="form-group">
+                                            <p class="error-message"></p>
+                                            <input type="text" name="foldername" class="form-control" id="input-new-foldername" placeholder="Folder Name" required>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                        <button class="btn btn-primary" name="saveNameButton" id="save-name-button" type="submit">Save changes</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Create new folder pop-up -->
+                    <div class="modal fade" id="add-folder-modal" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Create the Production</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+
+                                <form method=POST action="/addFolder">
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <p class="error-message"></p>
+                                            <input type="text" name="foldername" class="form-control" id="input-new-folder" placeholder="Folder Name" required>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                        <button class="btn btn-primary" name="addFolderButton" id="add-folder-button" type="submit">Create</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
