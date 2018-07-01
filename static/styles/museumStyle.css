@@ -57,7 +57,8 @@
 #view-contents-button,
 #create-folder-button, 
 #purchase-ticket-button,
-#leave-review-button {
+#leave-review-button, 
+#view-reviews-button {
     font-size: 16px;
     background-color: #0275d8;
     margin-top: 3vh;
@@ -69,7 +70,8 @@
 #view-contents-button:hover,
 #create-folder-button:hover,
 #purchase-ticket-button:hover,
-#leave-review-button:hover {
+#leave-review-button:hover,
+#view-reviews-button:hover {
     background-color: #FDDA24;
     cursor: pointer;
 }

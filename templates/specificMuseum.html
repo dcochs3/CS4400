@@ -30,15 +30,13 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="add-container offset-1 col-10 offset-md-2 col-md-8">
-                    <h3>CHANGE NAME HERE</h3>
+                    <h3>{{museum_name}} </h3>
                     {% if error %}
                         <p class="error" style="color:red;"><strong>*</strong> {{ error }}
                     {% endif %}
 
 
-
 <!--
-                    review museum
                     view other reviews -->
                     <div style="text-align:center;">
 
@@ -48,9 +46,15 @@
                     <div style="text-align:center;">
 
                         <!-- Leave a Review BUTTON -->
-                        <button type="button" name="leave-review-button" class="btn" id="leave-review-button" value="Purchase" data-toggle="modal" data-target="#leave-review-modal">Review Museum</button>
+                        <button type="button" name="leave-review-button" class="btn" id="leave-review-button" value="Review" data-toggle="modal" data-target="#leave-review-modal">Review Museum</button>
 
                     </div>
+                    <form method=POST action='/viewReviews/{{museum_name}}'>
+                        <div class="form-group">
+                            <!-- View all Reviews BUTTON -->
+                            <button type="submit" name="view-reviews-button" class="btn" id="view-reviews-button" value="View">View All Reviews</button>
+                        </div>
+                    </form>
 
 
                     <!-- Purchase Ticket pop-up -->
@@ -68,7 +72,7 @@
                                     <div class="modal-body">
                                         <div class="form-group">
                                             <p class="error-message"></p>
-                                            Thank you for purchasing a ticket to MUSEUM NAME.
+                                            Thank you for purchasing a ticket to {{museum_name}}.
                                             </br>
                                             Check your email for the ticket!
                                         </div>
@@ -132,7 +136,7 @@
 
 
 
-                    <form action='/back' enctype=multipart/form-data>
+                    <form action='/back'>
                         <div style="text-align:left;">
                             <!--Go back to search-->
                             <button type="cancel" name="all-museums-button" class="btn" id="all-museums-button" value="Back">Back</button>

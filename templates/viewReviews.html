@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>All Museums - Barcelona Museums Ticketing & Review System</title>
+        <title>All Reviews - Barcelona Museums Ticketing & Review System</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <!-- jQuery -->
@@ -24,7 +24,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="add-container offset-1 col-10 offset-md-2 col-md-8">
-                    <h3>All Museums</h3>
+                    <h3>All Reviews</h3>
                     {% if error %}
                         <p class="error" style="color:red;"><strong>*</strong> {{ error }}
                     {% endif %}
@@ -32,8 +32,8 @@
 
 
 
-
-                    <form action='/back'>
+                    <!-- route back to the museum page you came from -->
+                    <form action='/museum/{{museum_name}}'
                         <div class="form-group">
                             <div style="text-align:left;">
 

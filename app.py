@@ -72,9 +72,10 @@ def login():
     return redirect(url_for('loggedin'))
 
 #rendering home page after logging in
-@app.route('/home')
-def loggedin():          
-    return render_template('home.html')
+@app.route('/home', methods=["GET"])
+def loggedin():
+    museumname = request.form.get('museumname')
+    return render_template('home.html', museum_name=museumname)
 
 @app.route('/postregister', methods=['POST'])
 def register():
@@ -84,9 +85,20 @@ def register():
 def allMuseums():
     return render_template('allMuseums.html')
 
-@app.route('/postselectSpecificMuseum', methods=['POST'])
-def specificMuseum():
-    return render_template('specificMuseum.html')
+@app.route('/museum', methods=["POST"])
+def getMuseumName():
+    museum_name = request.form.get('museumname')
+    return redirect(url_for('specificMuseum', museum_name=museum_name))
+
+@app.route('/museum/<museum_name>', methods=['POST', "GET"])
+def specificMuseum(museum_name):
+    museumname = museum_name
+    return render_template('specificMuseum.html', museum_name=museumname)
+
+@app.route('/viewReviews/<museum_name>', methods=['POST'])
+def viewReviews(museum_name):
+    museum_name = museum_name
+    return render_template('viewReviews.html', museum_name=museum_name)
 
 @app.route('/back')
 def back():
