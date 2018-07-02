@@ -94,7 +94,9 @@ def getMuseumName():
     museum_name = request.form.get('museumname')
     museum_name_dropdown = request.form.get('museumnamedropdown')
     print("Museuem name: " + museum_name)
-    if museum_name is '' and museum_name_dropdown is '':
+    #TODO: make a museum_name_dropdown
+    # if museum_name is '' and museum_name_dropdown is '':
+    if museum_name is '':
         error = "Must enter/select a museum name!"
         return redirect(url_for('loggedin', error=error))
     # elif museum_name is not '' and museum_name not in list of museums:
