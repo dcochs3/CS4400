@@ -31,26 +31,77 @@
                         <p class="error" style="color:red;"><strong>*</strong> {{ error }}
                     {% endif %}
 
+                    <div class="container">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Exhibit</th>
+                                    <th>Year</th>
+                                    <th>Link</th>
+                                    <!-- if isCurator -->
+                                    <th>Remove Exhibit</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- for each exhibit in museum -->
+                                <tr>
+                                    <td>Mary</td>
+                                    <td>Moe</td>
+                                    <td>
+                                        <a href="/">Link</a>
+                                    </td>
+                                    <!-- if isCurator -->
+                                    <td>
+                                        <!-- TODO action -->
+                                        <form action='/back'>
+                                            <div style="text-align:center;">
+                                                <button type="submit" name="remove-exhibit-button" class="btn" id="remove-exhibit-button" value="Remove">Remove</button>
+                                            </div>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Jim</td>
+                                    <td>Merrigold</td>
+                                    <td>
+                                        <a href="/">Link</a>
+                                    </td>
+                                    <td>
+                                        <!-- TODO action -->
+                                        <form action='/back'>
+                                            <div style="text-align:center;">
+                                                <button type="submit" name="remove-exhibit-button" class="btn" id="remove-exhibit-button" value="Remove">Remove</button>
+                                            </div>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
-<!--
-                    view other reviews -->
+
                     <div style="text-align:center;">
-
                         <!-- Purchase Ticket BUTTON -->
                         <button type="button" name="purchase-ticket-button" class="btn" id="purchase-ticket-button" value="Purchase" data-toggle="modal" data-target="#purchase-ticket-modal">Purchase Ticket</button>
                     </div>
-                    <div style="text-align:center;">
 
+                    <div style="text-align:center;">
                         <!-- Leave a Review BUTTON -->
                         <button type="button" name="leave-review-button" class="btn" id="leave-review-button" value="Review" data-toggle="modal" data-target="#leave-review-modal">Review Museum</button>
-
                     </div>
+
                     <form method=POST action='/viewReviews/{{museum_name}}'>
                         <div class="form-group">
                             <!-- View all Reviews BUTTON -->
                             <button type="submit" name="view-reviews-button" class="btn" id="view-reviews-button" value="View">View All Reviews</button>
                         </div>
                     </form>
+
+                    <!-- if isCurator -->
+                    <div style="text-align:center;">
+                        <!-- Add Exhibit BUTTON -->
+                        <button type="button" name="add-exhibit-button" class="btn" id="add-exhibit-button" value="Add" data-toggle="modal" data-target="#add-exhibit-modal">Add Exhibit</button>
+                    </div>
 
 
                     <!-- Purchase Ticket pop-up -->
@@ -129,6 +180,50 @@
                             </div>
                         </div>
                     </div>
+
+
+                    <!-- Add exhibit pop-up -->
+                    <div class="modal fade" id="add-exhibit-modal" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">New Exhibit Form</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+
+                                <!-- TO DO: ACTION -->
+                                <form method=POST action='/museum/{{museum_name}}'>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <p class="error-message"></p>
+
+                                            <!--EXHIBIT NAME INPUT-->
+                                            <div class="form-group">
+                                                <input type="text" name="exhibitname" class="form-control" id="input-exhibitname" placeholder="Exhibit Name" required>
+                                            </div>
+                                            <!--YEAR INPUT-->
+                                            <div class="form-group">
+                                                <input type="text" name="year" class="form-control" id="input-year" placeholder="Year" required>
+                                            </div>
+                                            <!-- Link -->
+                                            <div class="form-group">
+                                                <input type="text" name="link" class="form-control" id="input-link" placeholder="Link">
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                        <button class="btn btn-primary" name="submit-exhibit-button" id="submit-exhibit-button" type="submit">Submit Exhibit</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+
 
 
 

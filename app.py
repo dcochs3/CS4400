@@ -72,6 +72,9 @@ def login():
     # if login was successful, set this to the user's email
     # TODO
     session['user'] = 'howdy@gmail.com'
+    # if user email exists in the admin table
+    # if user email isCurator flag is marked
+    # these yield different views
     return redirect(url_for('loggedin'))
 
 #rendering home page after logging in

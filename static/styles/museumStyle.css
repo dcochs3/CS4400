@@ -58,7 +58,9 @@
 #create-folder-button, 
 #purchase-ticket-button,
 #leave-review-button, 
-#view-reviews-button {
+#view-reviews-button,
+#submit-exhibit-button,
+#add-exhibit-button {
     font-size: 16px;
     background-color: #0275d8;
     margin-top: 3vh;
@@ -71,7 +73,9 @@
 #create-folder-button:hover,
 #purchase-ticket-button:hover,
 #leave-review-button:hover,
-#view-reviews-button:hover {
+#view-reviews-button:hover,
+#submit-exhibit-button:hover,
+#add-exhibit-button:hover {
     background-color: #FDDA24;
     cursor: pointer;
 }
@@ -121,7 +125,8 @@
 }
 
 #all-museums-button,
-#curator-request-button {
+#curator-request-button,
+#remove-exhibit-button {
     font-size: 16px;
     background-color: #0275d8;
     margin-top: 3vh;
@@ -129,7 +134,8 @@
     color: white;
 }
 #all-museums-button:hover,
-#curator-request-button:hover {
+#curator-request-button:hover,
+#remove-exhibit-button:hover {
     background-color: #FDDA24;
     cursor: pointer;
 }
