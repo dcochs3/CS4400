@@ -1,5 +1,4 @@
 from flask import Flask, flash, redirect, render_template, request, session, abort, url_for, json, send_file
-from flask_mail import Mail, Message
 import os
 from urllib.parse import urlparse
 import psycopg2
@@ -31,14 +30,8 @@ app.config['UPLOAD_FOLDER'] = "/tmp/"
 app.config.update(
     # DEBUG=True,
     #EMAIL SETTINGS
-    MAIL_SERVER='smtp.gmail.com',
-    MAIL_PORT=465,
-    MAIL_USE_SSL=True,
-    MAIL_USERNAME = 'crunch.thracker@gmail.com',
-    #MAIL_PASSWORD = os.environ['epassword']
-    MAIL_PASSWORD = 'crunchthracker'
     )
-mail = Mail(app)
+
 
 #configuring database url and path
 #url = urlparse(os.environ['DATABASE_URL'])
