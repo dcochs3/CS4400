@@ -1,11 +1,13 @@
-#all-museums-button {
+#all-museums-button,
+#curator-request-button {
     font-size: 16px;
     background-color: #0275d8;
     margin-top: 3vh;
     margin-bottom: 4vh;
     color: white;
 }
-#all-museums-button:hover {
+#all-museums-button:hover,
+#curator-request-button:hover {
     background-color: #FDDA24;
     cursor: pointer;
 }

@@ -55,7 +55,6 @@ cursor = conn.cursor()
 @app.route('/')
 def welcome():
     error = request.args.get('error')
-    # print (repr(error))
     return render_template('login.html', error=error)
 
 #rendering registration page
@@ -69,26 +68,40 @@ def newUser():
 #method for logging in, on home page.
 def login():
     #verify the credentials
+
+    # if login was successful, set this to the user's email
+    # TODO
+    session['user'] = 'howdy@gmail.com'
     return redirect(url_for('loggedin'))
 
 #rendering home page after logging in
-@app.route('/home', methods=["GET"])
+@app.route('/home')
 def loggedin():
+    error = request.args.get('error')
     museumname = request.form.get('museumname')
-    return render_template('home.html', museum_name=museumname)
+    return render_template('home.html', museum_name=museumname, error=error)
 
 @app.route('/postregister', methods=['POST'])
 def register():
     return redirect(url_for('loggedin'))
 
-@app.route('/postselectAllMuseums', methods=['POST'])
+@app.route('/allMuseums', methods=['POST'])
 def allMuseums():
     return render_template('allMuseums.html')
 
 @app.route('/museum', methods=["POST"])
 def getMuseumName():
     museum_name = request.form.get('museumname')
-    return redirect(url_for('specificMuseum', museum_name=museum_name))
+    museum_name_dropdown = request.form.get('museumnamedropdown')
+    print("Museuem name: " + museum_name)
+    if museum_name is '' and museum_name_dropdown is '':
+        error = "Must enter/select a museum name!"
+        return redirect(url_for('loggedin', error=error))
+    # elif museum_name is not '' and museum_name not in list of museums:
+    #     error = "The museum you have entered does not exist!"
+    #     return redirect(url_for('loggedin', error=error))
+    else:
+        return redirect(url_for('specificMuseum', museum_name=museum_name))
 
 @app.route('/museum/<museum_name>', methods=['POST', "GET"])
 def specificMuseum(museum_name):
@@ -104,6 +117,31 @@ def viewReviews(museum_name):
 def back():
     return redirect(url_for('loggedin'))
 
+@app.route('/logout')
+def logout():
+    session.pop('user', None)
+    return redirect(url_for('welcome'))
+
+@app.route('/myTickets')
+def myTickets():
+    return render_template('myTickets.html')
+
+@app.route('/myReviews')
+def myReviews():
+    return render_template('myReviews.html')
+
+@app.route('/curatorRequest')
+def curatorRequest():
+    error = request.args.get('error')
+    return render_template('curatorRequest.html', error=error)
+
+@app.route('/postcuratorRequest', methods=["POST"])
+def curatorRequested():
+    # if TODO:
+    # error = "You are already a curator for that museum!"
+
+    error = "Request successfully submitted!"
+    return redirect(url_for('curatorRequest', error=error))
 
 if __name__ == "__main__":
     app.jinja_env.add_extension('jinja2.ext.do')
