@@ -45,14 +45,12 @@
                                         <a href="/museum/{{museum|first}}">{{museum|first}}</a>
                                     </td>
                                     <td>
-                                        {% for rating in rating_list %}
-                                            {% if rating|first == museum|first %}
-                                                <!-- TODO: remove trailing zeros -->
+                                        {% for rating in rating_list if rating|first == museum|first %}
+                                                <!-- TODO: remove trailing zeros? -->
                                                 {{ rating[1] }} / 5
-                                            {% endif %}
+                                            {% else %}
+                                                -- / 5
                                         {% endfor %}
-
-
                                     </td>
                                 </tr>
                                 {% endfor %}

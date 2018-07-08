@@ -300,17 +300,11 @@ def allMuseums():
     query = "SELECT museumName FROM museum;"
     query1 = "SELECT museumName, AVG(rating) FROM review GROUP BY museumName;"
 
-
-
     try:
         cursor.execute(query)
         museum_list = cursor.fetchall()
         cursor.execute(query1)
         rating_list = cursor.fetchall()
-
-        print(rating_list)
-
-
 
         if museum_list is None:
             error = 'No museums currently exist.'
