@@ -164,13 +164,17 @@ def login():
     #verify the credentials
     email = request.form['email']
     password = request.form['password']
+    isCurator = None
     error = None
 
     query = "SELECT email FROM visitor WHERE email = '{0}' AND password = '{1}';".format(email, password)
+    query1 = "SELECT isCurator FROM museumdb.visitor WHERE email = '{0}';".format(email);
 
     try:
         cursor.execute(query)
         email_list = cursor.fetchone()
+        cursor.execute(query1)
+        isCurator = cursor.fetchone()
 
         if email_list is None:
             error = 'The email or password you have entered is incorrect.'
@@ -193,14 +197,15 @@ def login():
     # if user email exists in the admin table
     # if user email isCurator flag is marked
     # these yield different views
-    return redirect(url_for('loggedin'))
+    return redirect(url_for('loggedin', isCurator=isCurator))
 
 #rendering home page after logging in
 @app.route('/home')
 def loggedin():
     error = request.args.get('error')
     museumname = request.form.get('museumname')
-    return render_template('home.html', museum_name=museumname, error=error)
+    isCurator = request.args.get('isCurator')
+    return render_template('home.html', museum_name=museumname, isCurator=isCurator, error=error)
 
 #rendering registration page
 @app.route('/register')
@@ -289,13 +294,15 @@ def register():
         return redirect(url_for('newUser', error=error))
 
     conn.commit() 
-    return redirect(url_for('loggedin'))
+    return redirect(url_for('loggedin', isCurator=isCurator))
 
 @app.route('/allMuseums', methods=['POST'])
 def allMuseums():
     museum_list = None
     rating_list = None
     error = None
+    isCurator = request.args.get('isCurator')
+
 
     query = "SELECT museumName FROM museum;"
     query1 = "SELECT museumName, AVG(rating) FROM review GROUP BY museumName;"
@@ -308,7 +315,7 @@ def allMuseums():
 
         if museum_list is None:
             error = 'No museums currently exist.'
-            return redirect(url_for('loggedin', error=error))
+            return redirect(url_for('loggedin', error=error, isCurator=isCurator))
 
     except:
         query = "rollback;"
@@ -316,28 +323,40 @@ def allMuseums():
         print('error')
 
 
-    return render_template('allMuseums.html', museum_list=museum_list, rating_list=rating_list)
+    return render_template('allMuseums.html', museum_list=museum_list, isCurator=isCurator, rating_list=rating_list)
 
 @app.route('/museum', methods=["POST"])
 def getMuseumName():
     museum_name = request.form.get('museumname')
     museum_name_dropdown = request.form.get('museumnamedropdown')
-    print("Museuem name: " + museum_name)
+    isCurator = request.args.get('isCurator')
     #TODO: make a museum_name_dropdown
     # if museum_name is '' and museum_name_dropdown is '':
     if museum_name is '':
         error = "Must enter/select a museum name!"
-        return redirect(url_for('loggedin', error=error))
+        return redirect(url_for('loggedin', error=error, isCurator=isCurator))
     # elif museum_name is not '' and museum_name not in list of museums:
     #     error = "The museum you have entered does not exist!"
     #     return redirect(url_for('loggedin', error=error))
     else:
-        return redirect(url_for('specificMuseum', museum_name=museum_name))
+        return redirect(url_for('specificMuseum', museum_name=museum_name, isCurator=isCurator))
 
 @app.route('/museum/<museum_name>', methods=['POST', "GET"])
 def specificMuseum(museum_name):
     museumname = museum_name
-    return render_template('specificMuseum.html', museum_name=museumname)
+    isCurator = request.args.get('isCurator')
+    museum_info = None
+
+    query = "SELECT exhibitName, year, url FROM museumdb.exhibit WHERE museumName = '{0}';".format(museumname)
+
+    try:
+        cursor.execute(query)
+        museum_info = cursor.fetchall()
+        print(museum_info)
+    except:
+        print('error')
+
+    return render_template('specificMuseum.html', museum_name=museumname, isCurator=isCurator, museum_info=museum_info)
 
 @app.route('/viewReviews/<museum_name>', methods=['POST'])
 def viewReviews(museum_name):
@@ -346,7 +365,8 @@ def viewReviews(museum_name):
 
 @app.route('/back')
 def back():
-    return redirect(url_for('loggedin'))
+    isCurator = request.args.get('isCurator')
+    return redirect(url_for('loggedin', isCurator=isCurator))
 
 @app.route('/logout')
 def logout():

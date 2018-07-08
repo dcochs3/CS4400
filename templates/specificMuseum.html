@@ -38,43 +38,37 @@
                                     <th>Exhibit</th>
                                     <th>Year</th>
                                     <th>Link</th>
+
                                     <!-- if isCurator -->
-                                    <th>Remove Exhibit</th>
+                                    {% if isCurator %}
+                                        <th>Remove Exhibit</th>
+                                    {% endif %}
                                 </tr>
                             </thead>
                             <tbody>
                                 <!-- for each exhibit in museum -->
+                                {% for exhibit in museum_info %}
                                 <tr>
-                                    <td>Mary</td>
-                                    <td>Moe</td>
+                                    <td>{{exhibit[0]}}</td>
+                                    <td>{{exhibit[1]}}</td>
                                     <td>
-                                        <a href="/">Link</a>
+                                        <a href="//{{exhibit[2]}}">{{exhibit[2]}}</a>
                                     </td>
+
                                     <!-- if isCurator -->
-                                    <td>
-                                        <!-- TODO action -->
-                                        <form action='/back'>
-                                            <div style="text-align:center;">
-                                                <button type="submit" name="remove-exhibit-button" class="btn" id="remove-exhibit-button" value="Remove">Remove</button>
-                                            </div>
-                                        </form>
-                                    </td>
+                                    {% if isCurator %}
+                                        <td>
+                                            <!-- TODO action -->
+                                            <form action='/removeExhibit'>
+                                                <div style="text-align:center;">
+                                                    <button type="submit" name="remove-exhibit-button" class="btn" id="remove-exhibit-button" value="Remove">Remove</button>
+                                                </div>
+                                            </form>
+                                        </td>
+                                    {% endif %}
                                 </tr>
-                                <tr>
-                                    <td>Jim</td>
-                                    <td>Merrigold</td>
-                                    <td>
-                                        <a href="/">Link</a>
-                                    </td>
-                                    <td>
-                                        <!-- TODO action -->
-                                        <form action='/back'>
-                                            <div style="text-align:center;">
-                                                <button type="submit" name="remove-exhibit-button" class="btn" id="remove-exhibit-button" value="Remove">Remove</button>
-                                            </div>
-                                        </form>
-                                    </td>
-                                </tr>
+
+                                {% endfor %}
                             </tbody>
                         </table>
                     </div>
