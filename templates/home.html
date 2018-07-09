@@ -22,88 +22,122 @@
         <!--SEARCH BAR-->
         {% include 'navbar.html' %}
         <div class="container-fluid">
+
+            {% if not isAdmin %}
+                <form action='/myAccount'>
+                    <div class="form-group">
+                            <h3>Welcome!</h3>
+
+
+                            <button type="submit" name="manage-account-button" class="btn" id="manage-account-button" value="Manage">Manage Account</button>
+
+                    </div>
+                </form>
+            {% endif %}
+
             <div class="row">
                 <div class="add-container offset-2 col-8">
-                    <h3>Select a Museum</h3>
-                    {% if error %}
-                        <p class="error" style="color:red;"><strong>*</strong> {{ error }}
+
+                    {% if not isAdmin %}
+                        <h3>Select a Museum</h3>
+                        {% if error %}
+                            <p class="error" style="color:red;"><strong>*</strong> {{ error }}
+                        {% endif %}
+
+                        <form method=POST action='/museum'>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <input type="museumname" name="museumname" class="form-control" id="input-mus-name" placeholder="Search by Museum Name">
+                                    </div>
+                                    OR
+                                    <div class="col-md-5">
+
+                                    <!-- INSERT DROP DOWN MENU OF MUSEUMS HERE -->
+                                    
+
+                                    </div>
+                                    <div class="col-md-1">
+                                        <span class="form-group">
+                                            <button class="btn" type="submit" name="search-button" id="search-button" value="Search">Go</button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+
+                        <form method=POST action='/allMuseums'>
+                            <div class="form-group">
+                                <!--View all Museums BUTTON-->
+                                <button type="submit" name="all-museums-button" class="btn" id="all-museums-button" value="Add">View All Museums</button>
+                            </div>
+                        </form>
                     {% endif %}
 
-                    <form method=POST action='/museum'>
+                    {% if isAdmin %}
+                        <h3>Welcome, {{email}}!</h3>
+
+                        <form action='/reviewCuratorRequests'>
+                            <div class="form-group">
+                                <button type="submit" name="review-requests-button" class="btn" id="review-requests-button" value="Review">Review Curator Requests</button>
+                            </div>
+                        </form>
+
                         <div class="form-group">
-                            <div class="row">
-                                <div class="col-md-5">
-                                    <input type="museumname" name="museumname" class="form-control" id="input-mus-name" placeholder="Search by Museum Name">
-                                </div>
-                                OR
-                                <div class="col-md-5">
+                            <div style="text-align:center;">
+                                <button type="button" name="add-museum-button" class="btn" id="add-museum-button" value="Add" data-toggle="modal" data-target="#add-museum-modal">Add Museum</button>
+                            </div>
+                        </div>
 
-                                <!-- INSERT DROP DOWN MENU OF MUSEUMS HERE -->
-                                
+                        <form action='/deleteMuseum'>
+                            <div class="form-group">
+                                <button type="submit" name="delete-museum-button" class="btn" id="delete-museum-button" value="Delete">Delete Museum</button>
+                            </div>
+                        </form>
 
-                                </div>
-                                <div class="col-md-1">
-                                    <span class="form-group">
-                                        <button class="btn" type="submit" name="search-button" id="search-button" value="Search">Go</button>
-                                    </span>
+                        <form action='/logout'>
+                            <div class="form-group">
+                                <!-- View all Reviews BUTTON -->
+                                <button type="submit" name="logout-button" class="btn" id="logout-button" value="Logout">Logout</button>
+                            </div>
+                        </form>
+
+                        <!-- Add museum pop-up -->
+                        <!-- TODO -->
+                        <div class="modal fade" id="add-museum-modal" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">New Museum Form</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+
+                                    <!-- TO DO: ACTION -->
+                                    <form method=POST action='/home'>
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <p class="error-message"></p>
+
+                                                <!--Museum NAME INPUT-->
+                                                <div class="form-group">
+                                                    <input type="text" name="museumname" class="form-control" id="input-museumname" placeholder="Museum Name" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                            <button class="btn btn-primary" name="submit-museum-button" id="submit-museum-button" type="submit">Submit Museum</button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
-                    </form>
-
-
-                    <form method=POST action='/allMuseums'>
-                        <div class="form-group">
-                            <!--View all Museums BUTTON-->
-                            <button type="submit" name="all-museums-button" class="btn" id="all-museums-button" value="Add">View All Museums</button>
-                        </div>
-                    </form>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </body>
 </html>
-
-<script>
-    $(document).ready(function() {
-        $('#cancel-confirmed').click(function() {
-            location.href = 'home';
-        });
-        $( '#cancel-button' ).click(function() {
-            $('#cancel-modal').modal('show');
-            return false;
-        });
-
-        // display the photos after selecting the files
-        $(":file").change(function (e) {
-            if (this.files && this.files[0]) {
-                var reader = new FileReader();
-                $('#'+ $(this).attr('name')).css('display','initial');
-                var img = $('#'+ $(this).attr('name'));
-                reader.onload = function (e) {
-                    img.attr('src', e.target.result);
-                };
-                reader.readAsDataURL(this.files[0]);
-            }
-        });
-
-        toggle_prop_and_costume();
-    });
-
-    function clear_radio_butttons(input_name) {
-        $('input[name=' + input_name + ']:checked').prop('checked',false);
-    }
-
-    function toggle_prop_and_costume() {
-        $("input[name='item']").change(function() {
-            $('#' + $(this).val()).removeClass('hide');
-            if ($(this).val() === 'prop-type') {
-                $('#costume-type').addClass('hide');
-                clear_radio_butttons('costume');
-            } else {
-                $('#prop-type').addClass('hide');
-                clear_radio_butttons('prop');
-            }
-        });
-    }
-</script>

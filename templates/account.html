@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Manage Account - Barcelona Museums Ticketing & Review System</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+        <!-- Tether -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+        <!-- Our CSS -->
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/museumStyle.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/modalStyle.css') }}">
+         <!-- Add icon library -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+        <!-- Production Folder functions -->
+        <script src="{{ url_for('static',filename='museums.js') }}"></script>
+    </head>
+    <body>
+        <!--NAV BAR-->
+        {% include 'navbar.html' %}
+        <div class="container-fluid">
+            <div class="row">
+                <div class="add-container offset-1 col-10 offset-md-2 col-md-8">
+                    <h3>Welcome, {{email}}! </h3>
+                    {% if error %}
+                        <p class="error" style="color:red;"><strong>*</strong> {{ error }}
+                    {% endif %}
+
+                    <form action='/myTickets'>
+                        <div class="form-group">
+                            <!-- View all Reviews BUTTON -->
+                            <button type="submit" name="my-tickets-button" class="btn" id="my-tickets-button" value="Tickets">My Tickets</button>
+                        </div>
+                    </form>
+
+                    <form action='/myReviews'>
+                        <div class="form-group">
+                            <!-- View all Reviews BUTTON -->
+                            <button type="submit" name="my-reviews-button" class="btn" id="my-reviews-button" value="Reviews">My Reviews</button>
+                        </div>
+                    </form>
+
+                    <form action='/curatorRequest'>
+                        <div class="form-group">
+                            <!-- View all Reviews BUTTON -->
+                            <button type="submit" name="request-button" class="btn" id="request-button" value="Request">Curator Request</button>
+                        </div>
+                    </form>
+
+                    <!-- TODO -->
+                    <!-- if curator -->
+                    <form action='/myMuseums'>
+                        <div class="form-group">
+                            <!-- View all Reviews BUTTON -->
+                            <button type="submit" name="my-museums-button" class="btn" id="my-museums-button" value="Museums">My Museums</button>
+                        </div>
+                    </form>
+
+                    <form action='/logout'>
+                        <div class="form-group">
+                            <!-- View all Reviews BUTTON -->
+                            <button type="submit" name="logout-button" class="btn" id="logout-button" value="Logout">Logout</button>
+                        </div>
+                    </form>
+
+                    <div style="text-align:center;">
+                        <!-- Delete my account -->
+                        <button type="button" name="delete-account-button" class="btn" id="delete-account-button" value="Delete" data-toggle="modal" data-target="#delete-account-modal">Delete my Account</button>
+                    </div>
+
+                    <!-- Deletion Confirmation Modal -->
+                    <div class="modal fade" id="delete-account-modal" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Deletion Confirmation</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body" style="text-align: left;">
+                                    Are you sure you want to delete your account?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                    <form method=POST action='/deleteAccount/{{email}}'>
+                                        <button class="btn btn-primary" id="delete-confirmed" type="submit" value={{email}}>Delete</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form action='/back'>
+                        <div style="text-align:left;">
+                            <!--Go back to search-->
+                            <button type="cancel" name="all-museums-button" class="btn" id="all-museums-button" value="Back">Back to Home</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

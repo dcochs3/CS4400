@@ -103,7 +103,7 @@ TABLES['exhibit'] = (
     "CREATE TABLE `exhibit` ("
     "   `museumName` varchar(255) NOT NULL,"
     "   `exhibitName` varchar(255) NOT NULL,"
-    "   `year` char(4),"
+    "   `year` char(4) NOT NULL,"
     "   `url` varchar(2083),"
     "   `curatorEmail` varchar(255) NOT NULL,"
     "   PRIMARY KEY (`museumName`, `exhibitName`),"
@@ -166,27 +166,49 @@ def login():
     password = request.form['password']
     isCurator = None
     error = None
+    visitor_list = None
+    admin_list = None
+    isAdmin = None
 
     query = "SELECT email FROM visitor WHERE email = '{0}' AND password = '{1}';".format(email, password)
     query1 = "SELECT isCurator FROM museumdb.visitor WHERE email = '{0}';".format(email);
+    adminquery = "SELECT email FROM museumdb.admin WHERE email = '{0}' AND password = '{1}';".format(email, password)
 
     try:
+        # from visitor table
         cursor.execute(query)
-        email_list = cursor.fetchone()
+        visitor_list = cursor.fetchone()
         cursor.execute(query1)
         isCurator = cursor.fetchone()
 
-        if email_list is None:
+        # from admin table
+        cursor.execute(adminquery)
+        admin_list = cursor.fetchone()
+
+
+        if visitor_list is None and admin_list is None:
+            # no email/pass combo exists in the database
             error = 'The email or password you have entered is incorrect.'
             return redirect(url_for('welcome', error=error))
-        else:
+        elif visitor_list is not None:
             # login was successful
+            # the user is a normal user
             # set session value to the user email
-            session['user'] = email_list[0]
+            session['user'] = visitor_list[0]
 
             # this makes the session expire when the BROWSER is closed, not the tab/window
             session.SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-    except:
+        else:
+            # login was successful
+            # the user is admin
+            # set session value to the user email
+            session['user'] = admin_list[0]
+
+            # this makes the session expire when the BROWSER is closed, not the tab/window
+            session.SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+            isAdmin = 1
+    except Exception as e:
+        print(e.msg)
         query = "rollback;"
         cursor.execute(query)
         error = 'The email or password you have entered is incorrect.'
@@ -197,7 +219,7 @@ def login():
     # if user email exists in the admin table
     # if user email isCurator flag is marked
     # these yield different views
-    return redirect(url_for('loggedin', isCurator=isCurator))
+    return redirect(url_for('loggedin', isCurator=isCurator, isAdmin=isAdmin, email=email))
 
 #rendering home page after logging in
 @app.route('/home')
@@ -205,7 +227,9 @@ def loggedin():
     error = request.args.get('error')
     museumname = request.form.get('museumname')
     isCurator = request.args.get('isCurator')
-    return render_template('home.html', museum_name=museumname, isCurator=isCurator, error=error)
+    isAdmin = request.args.get('isAdmin')
+    email = request.args.get('email')
+    return render_template('home.html', museum_name=museumname, isCurator=isCurator, isAdmin=isAdmin, email=email, error=error)
 
 #rendering registration page
 @app.route('/register')
@@ -362,6 +386,10 @@ def specificMuseum(museum_name):
 def viewReviews(museum_name):
     museum_name = museum_name
     return render_template('viewReviews.html', museum_name=museum_name)
+
+@app.route('/myAccount')
+def manageAccount():
+    return render_template('account.html')
 
 @app.route('/back')
 def back():

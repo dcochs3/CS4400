@@ -41,6 +41,8 @@
     background-color: #FDDA24;
 }
 
+
+
 #delete-button {
     font-size: 16px;
     background-color: #f55f5f;
@@ -53,14 +55,61 @@
     cursor: pointer;
 }
 
-#add-to-folder-button,
-#view-contents-button,
-#create-folder-button, 
+#manage-account-button {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+#manage-account-button,
+#my-tickets-button,
+#my-reviews-button, 
+#my-museums-button,
+#logout-button,
+#delete-account-button,
+#request-button,
+#add-exhibit-button,
 #purchase-ticket-button,
 #leave-review-button, 
 #view-reviews-button,
-#submit-exhibit-button,
-#add-exhibit-button {
+#remove-exhibit-button,
+#review-requests-button,
+#add-museum-button,
+#delete-museum-button,
+#submit-museum-button,
+#submit-exhibit-button {
+    font-size: 16px;
+    background-color: #0275d8;
+    color: white;}
+
+#manage-account-button:hover,
+#my-tickets-button:hover,
+#my-reviews-button:hover, 
+#my-museums-button:hover,
+#logout-button:hover,
+#curator-request-button:hover,
+#delete-account-button:hover,
+#request-button:hover,
+#remove-exhibit-button:hover,
+#purchase-ticket-button:hover,
+#leave-review-button:hover,
+#view-reviews-button:hover,
+#add-exhibit-button:hover,
+#review-requests-button:hover,
+#add-museum-button:hover,
+#delete-museum-button:hover,
+#submit-exhibit-button:hover,
+#submit-museum-button:hover {
+    background-color: #FDDA24;
+    cursor: pointer;
+
+}
+
+#all-museums-button,
+#add-to-folder-button,
+#view-contents-button,
+#create-folder-button, 
+#curator-request-button {
     font-size: 16px;
     background-color: #0275d8;
     margin-top: 3vh;
@@ -71,11 +120,8 @@
 #add-to-folder-button:hover,
 #view-contents-button:hover,
 #create-folder-button:hover,
-#purchase-ticket-button:hover,
-#leave-review-button:hover,
-#view-reviews-button:hover,
-#submit-exhibit-button:hover,
-#add-exhibit-button:hover {
+#all-museums-button:hover,
+#curator-request-button:hover {
     background-color: #FDDA24;
     cursor: pointer;
 }
@@ -124,21 +170,6 @@
     display: none;
 }
 
-#all-museums-button,
-#curator-request-button,
-#remove-exhibit-button {
-    font-size: 16px;
-    background-color: #0275d8;
-    margin-top: 3vh;
-    margin-bottom: 4vh;
-    color: white;
-}
-#all-museums-button:hover,
-#curator-request-button:hover,
-#remove-exhibit-button:hover {
-    background-color: #FDDA24;
-    cursor: pointer;
-}
 #search-button {
     font-size: 16px;
     background-color: #0275d8;
@@ -170,6 +201,12 @@
     .container-fluid {
         margin-top: calc(156px + 20px);
     }
+}
+
+.container-fluid h3 {
+    color: #6a6a6a;
+    margin-bottom: 30px;
+    text-align: center;
 }
 
 .add-container {
