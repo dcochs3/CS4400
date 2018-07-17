@@ -52,10 +52,3 @@ CREATE TABLE Exhibit (MuseumName        VARCHAR(255),
                       FOREIGN KEY (MuseumName) REFERENCES Museum(MuseumName)
                       FOREIGN KEY (CuratorEmail) REFERENCES Visitor (Email)
 );
-
-CREATE TABLE Curates (CuratorEmail        VARCHAR(255),
-                      MuseumName          VARCHAR(255),
-                      PRIMARY KEY(CuratorEmail, MuseumName),
-                      FOREIGN KEY (MuseumName) REFERENCES Museum(MuseumName),
-                      FOREIGN KEY (CuratorEmail) REFERENCES Visitor(Email)
-);
