@@ -14,7 +14,8 @@ CREATE TABLE Visitor (Email        VARCHAR(255)    PRIMARY KEY,
 );
 
 CREATE TABLE Museum (MuseumName     VARCHAR(255)     PRIMARY KEY, 
-                     AdminEmail     VARCHAR(255)     NOT NULL
+                     CuratorEmail     VARCHAR(255),
+                     FOREIGN KEY(CuratorEmail) REFERENCES Visitor(Email)
 );
 
 CREATE TABLE CuratorRequest (MuseumName         VARCHAR(255),
