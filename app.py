@@ -62,9 +62,9 @@ TABLES['visitor'] = (
 TABLES['museum'] = (
     "CREATE TABLE `museum` ("
     "   `museumName` varchar(255) NOT NULL,"
-    "   `adminEmail` varchar(255) NOT NULL,"
+    "   `curatorEmail` varchar(255) NOT NULL,"
     "   PRIMARY KEY (`museumName`),"
-    "   FOREIGN KEY (`adminEmail`) REFERENCES `admin` (`email`)"
+    "   FOREIGN KEY (`curatorEmail`) REFERENCES `visitor` (`email`)"
     ")")
 
 TABLES['curator_request'] = (
@@ -107,15 +107,6 @@ TABLES['exhibit'] = (
     "   `url` varchar(2083),"
     "   `curatorEmail` varchar(255) NOT NULL,"
     "   PRIMARY KEY (`museumName`, `exhibitName`),"
-    "   FOREIGN KEY (`museumName`) REFERENCES `museum` (`museumName`),"
-    "   FOREIGN KEY (`curatorEmail`) REFERENCES `visitor` (`email`)"
-    ")")
-
-TABLES['curates'] = (
-    "CREATE TABLE `curates` ("
-    "   `curatorEmail` varchar(255) NOT NULL,"
-    "   `museumName` varchar(255) NOT NULL,"
-    "   PRIMARY KEY (`curatorEmail`, `museumName`),"
     "   FOREIGN KEY (`museumName`) REFERENCES `museum` (`museumName`),"
     "   FOREIGN KEY (`curatorEmail`) REFERENCES `visitor` (`email`)"
     ")")
