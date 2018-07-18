@@ -2,7 +2,7 @@ from __future__ import print_function
 from flask import Flask, flash, redirect, render_template, request, session, abort, url_for, json, send_file
 import os, mysql.connector
 from mysql.connector import errorcode
-from urllib.parse import urlparse
+#from urllib.parse import urlparse
 
 #for current date
 import datetime
@@ -53,7 +53,7 @@ TABLES['visitor'] = (
     "   `month` tinyint NOT NULL,"
     "   `year` char(4) NOT NULL,"
     "   `cvv` smallint NOT NULL,"
-    "   `isCurator` bit NOT NULL,"
+    "   `isCurator` boolean NOT NULL,"
     "   PRIMARY KEY (`email`),"
     "   CONSTRAINT CHK_CVV CHECK (CVV BETWEEN 100 AND 9999),"
     "   CONSTRAINT CHK_Month CHECK (Month BETWEEN 1 AND 12)"
@@ -296,12 +296,12 @@ def register():
 
 
 
-
-    query = "INSERT into visitor values ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}');".format(email, password, cardNumber, month, year, cvv, isCurator)
+    query = "INSERT into visitor values ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}');".format(email, password, cardNumber, month, year, cvv, int(isCurator))
     
     try:
         cursor.execute(query)
     except Exception as e:
+        print(e.msg)
         query = "rollback;"
         cursor.execute(query)
 
