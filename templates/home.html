@@ -45,23 +45,62 @@
                         {% endif %}
 
                         <form method=POST action='/museum'>
+
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-5">
-                                        <input type="museumname" name="museumname" class="form-control" id="input-mus-name" placeholder="Search by Museum Name">
+                                        {% if no_museums %}
+                                            <input type="museumname" name="museumname" class="form-control" id="input-mus-name" placeholder="No museums currently exist!" disabled="disabled">
+                                        {% else %}
+                                            <input type="museumname" name="museumname" class="form-control" id="input-mus-name" placeholder="Search by Museum Name" >
+                                        {% endif %}
                                     </div>
+
                                     OR
-                                    <div class="col-md-5">
 
-                                    <!-- INSERT DROP DOWN MENU OF MUSEUMS HERE -->
-                                    
+                                    {% if no_museums %}
 
-                                    </div>
-                                    <div class="col-md-1">
-                                        <span class="form-group">
-                                            <button class="btn" type="submit" name="search-button" id="search-button" value="Search">Go</button>
-                                        </span>
-                                    </div>
+                                        <div class="col-md-5">
+                                            <div class="dropdown">
+                                                  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled="disabled">
+                                                    Select Museum
+                                                  </button>
+                                            </div>
+                                        </div>
+
+                                    {% else %}
+                                        <div class="col-md-5">
+                                            <div class="dropdown">
+                                                  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    Select Museum
+                                                  </button>
+                                                  <!-- LIST OF MUSEUMS -->
+                                                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                    {% for museum in museum_list %}
+
+                                                    <!-- TO DO: PUT LINK -->
+                                                        <a class="dropdown-item" href="/museum/{{museum|first}}">{{museum|first}}</a>
+                                                    {% endfor %}
+                                                  </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+
+                                    {% if no_museums %}
+                                        <div class="col-md-1">
+                                            <span class="form-group">
+                                                <button class="btn" type="submit" name="search-button" id="search-button" value="Search" disabled="disabled">Go</button>
+                                            </span>
+                                        </div>
+                                    {% else %}
+
+                                        <div class="col-md-1">
+                                            <span class="form-group">
+                                                <button class="btn" type="submit" name="search-button" id="search-button" value="Search">Go</button>
+                                            </span>
+                                        </div>
+                                    {% endif %}
+
                                 </div>
                             </div>
                         </form>

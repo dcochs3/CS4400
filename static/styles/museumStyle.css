@@ -42,7 +42,6 @@
 }
 
 
-
 #delete-button {
     font-size: 16px;
     background-color: #f55f5f;
@@ -178,6 +177,11 @@
 #search-button:hover {
     background-color: #FDDA24;
     cursor: pointer;
+}
+
+#search-button:disabled {
+    cursor: not-allowed;
+    background-color: #0275d8;
 }
 
 #cancel-button {

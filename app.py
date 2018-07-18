@@ -131,7 +131,7 @@ for name, ddl in TABLES.items():
 # ASSERT (aka an email should not exist in both the admin and visitor table)
 # I'm able to create a museum with an admin email that does not exist -- foreign key mapping isn't working?
 # Make default table population so if we need to delete and remake a table (like in order to add cascading deletes, etc), we can easily add back the data
-
+# Be aware of the "back" button (especially for different views -- if you're a curator and you go back and you can't see certain curator only buttons, thats a problem)
 
 
 
@@ -220,7 +220,23 @@ def loggedin():
     isCurator = request.args.get('isCurator')
     isAdmin = request.args.get('isAdmin')
     email = request.args.get('email')
-    return render_template('home.html', museum_name=museumname, isCurator=isCurator, isAdmin=isAdmin, email=email, error=error)
+    museum_list = None
+    no_museums = None
+
+    query = "SELECT museumName FROM museum;"
+    try:
+        cursor.execute(query)
+        museum_list = cursor.fetchall()
+
+        if len(museum_list) == 0:
+            no_museums = True
+
+    except Exception as e:
+        query = "rollback;"
+        cursor.execute(query)
+        print('error')
+
+    return render_template('home.html', museum_list=museum_list, no_museums=no_museums, museum_name=museumname, isCurator=isCurator, isAdmin=isAdmin, email=email, error=error)
 
 #rendering registration page
 @app.route('/register')
@@ -337,7 +353,6 @@ def allMuseums():
         cursor.execute(query)
         print('error')
 
-
     return render_template('allMuseums.html', museum_list=museum_list, isCurator=isCurator, rating_list=rating_list)
 
 @app.route('/museum', methods=["POST"])
@@ -361,20 +376,22 @@ def specificMuseum(museum_name):
     museumname = museum_name
     isCurator = request.args.get('isCurator')
     museum_info = None
+    museum_exists = None
 
+    query1 = "SELECT * FROM museumdb.museum WHERE museumName = '{0}';".format(museumname)
     query = "SELECT exhibitName, year, url FROM museumdb.exhibit WHERE museumName = '{0}';".format(museumname)
 
     try:
+        cursor.execute(query1)
+        museum_exists = cursor.fetchone()
         cursor.execute(query)
         museum_info = cursor.fetchall()
-        print(museum_info)
     except:
-        print('error')
+        print('Error')
 
-    if len(museum_info) == 0:
+    if museum_exists is None:
         # that museum entered does not exist in the database
         error = "There is no museum with that name."
-        print(error)
         return redirect(url_for('loggedin', error=error))
 
     return render_template('specificMuseum.html', museum_name=museumname, isCurator=isCurator, museum_info=museum_info)
@@ -418,6 +435,25 @@ def curatorRequested():
 
     error = "Request successfully submitted!"
     return redirect(url_for('curatorRequest', error=error))
+
+
+
+
+
+
+# ADMIN FUNCTIONS (DANA)
+# review curator requests
+@app.route('/reviewCuratorRequests')
+def reviewCuratorRequests():
+    error = request.args.get('error')
+    return render_template('reviewRequests.html', error=error)
+
+# delete museum
+@app.route('/deleteMuseum')
+def deleteMuseum():
+    error = request.args.get('error')
+    return render_template('deleteMuseum.html', error=error)
+
 
 if __name__ == "__main__":
     app.jinja_env.add_extension('jinja2.ext.do')
