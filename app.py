@@ -371,6 +371,12 @@ def specificMuseum(museum_name):
     except:
         print('error')
 
+    if len(museum_info) == 0:
+        # that museum entered does not exist in the database
+        error = "There is no museum with that name."
+        print(error)
+        return redirect(url_for('loggedin', error=error))
+
     return render_template('specificMuseum.html', museum_name=museumname, isCurator=isCurator, museum_info=museum_info)
 
 @app.route('/viewReviews/<museum_name>', methods=['POST'])
