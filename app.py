@@ -147,7 +147,6 @@ for name, ddl in TABLES.items():
 def welcome():
     error = request.args.get('error')
     return render_template('login.html', error=error)
-
 #method after clicking on login button
 @app.route('/postlogin', methods=['POST'])
 #method for logging in, on home page.
@@ -396,10 +395,28 @@ def specificMuseum(museum_name):
 
     return render_template('specificMuseum.html', museum_name=museumname, isCurator=isCurator, museum_info=museum_info)
 
+@app.route('/addExhibit/<museum_name>}', methods=['POST'])       
+def addExhibit(museum_name):
+    museumname = museum_name
+    isCurator = None
+    museum_info = None
+    curator_email = session.get('user')
+
+    print(curator_email)
+
+    return render_template('specificMuseum.html', museum_name=museumname, isCurator=isCurator, museum_info=museum_info)
+
 @app.route('/viewReviews/<museum_name>', methods=['POST'])
 def viewReviews(museum_name):
     museum_name = museum_name
-    return render_template('viewReviews.html', museum_name=museum_name)
+    query = "SELECT * FROM museumdb.review WHERE museumName = '{0}';".format(museum_name)
+
+    try:
+        cursor.execute(query)
+        reviews = cursor.fetchall()
+    except:
+        print('Error')    
+    return render_template('viewReviews.html', reviews=reviews, museum_name=museum_name)
 
 @app.route('/myAccount')
 def manageAccount():

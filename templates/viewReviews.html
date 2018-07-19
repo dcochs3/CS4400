@@ -28,6 +28,42 @@
                         <p class="error" style="color:red;"><strong>*</strong> {{ error }}
                     {% endif %}
 
+                    <div class="container">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Visitor</th>
+                                    <th>Comment</th>
+                                    <th>Rating</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- for each exhibit in museum -->
+                                {% for review in reviews %}
+                                <tr>
+                                    <td>{{review[1]}}</td>
+                                    <td>{{review[2]}}</td>
+                                    <td>
+                                        <a href="//{{review[2]}}">{{review[3]}}</a>
+                                    </td>
+
+                                    <!-- if isCurator -->
+                                    {% if isCurator %}
+                                        <td>
+                                            <!-- TODO action -->
+                                            <form action='/removeExhibit'>
+                                                <div style="text-align:center;">
+                                                    <button type="submit" name="remove-exhibit-button" class="btn" id="remove-exhibit-button" value="Remove">Remove</button>
+                                                </div>
+                                            </form>
+                                        </td>
+                                    {% endif %}
+                                </tr>
+
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
 
 
 
