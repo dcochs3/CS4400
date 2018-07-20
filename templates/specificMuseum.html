@@ -76,7 +76,9 @@
                     <div class="form-group">
                         <div style="text-align:center;">
                             <!-- Purchase Ticket BUTTON -->
-                            <button type="button" name="purchase-ticket-button" class="btn" id="purchase-ticket-button" value="Purchase" data-toggle="modal" data-target="#purchase-ticket-modal">Purchase Ticket</button>
+                            <form method=POST action="/purchasedTicket">
+                                <button type="button" name="purchase-ticket-button" class="btn" id="purchase-ticket-button" value="Purchase" data-toggle="modal" data-target="#purchase-ticket-modal">Purchase Ticket</button>
+                            </form>
                         </div>
                     </div>
 
@@ -194,7 +196,7 @@
                                 </div>
 
                                 <!-- TO DO: ACTION -->
-                                <form method=POST action='/addExhibit'>
+                                <form method=POST action='/addExhibit/{{museum_name}}'>
                                     <div class="modal-body">
                                         <div class="form-group">
                                             <p class="error-message"></p>

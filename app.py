@@ -396,16 +396,21 @@ def specificMuseum(museum_name):
 
     return render_template('specificMuseum.html', museum_name=museumname, isCurator=isCurator, museum_info=museum_info)
 
-@app.route('/addExhibit/<museum_name>}', methods=['POST'])       
+@app.route('/addExhibit/<museum_name>', methods=['POST'])       
 def addExhibit(museum_name):
     museumname = museum_name
+    exhibitname = request.form['exhibitname']
+    year = request.form['year']
+    link = request.form['link']
     isCurator = None
     museum_info = None
     curator_email = session.get('user')
-
-    print(curator_email)
-
-    return render_template('specificMuseum.html', museum_name=museumname, isCurator=isCurator, museum_info=museum_info)
+    query =  "INSERT INTO museumDB.exhibit VALUES ('{0}', '{1}', {2}, '{3}', '{4}');".format(museumname, exhibitname, year, link, curator_email)
+    try:
+        cursor.execute(query)
+    except Exception as e:
+        print(e.msg)
+    return redirect(url_for('specificMuseum', museum_name=museumname, isCurator=isCurator))
 
 @app.route('/viewReviews/<museum_name>', methods=['POST'])
 def viewReviews(museum_name):
@@ -418,6 +423,14 @@ def viewReviews(museum_name):
     except:
         print('Error')    
     return render_template('viewReviews.html', reviews=reviews, museum_name=museum_name)
+
+
+@app.route('/purchasedTicket', methods=['POST'])
+def purchaseTicket(museum_name):
+    query = "INSERT INTO museumDB.ticket (museumName, visitorEmail, price, purchaseTimeStamp) VALUES "
+    query += "{0}, {1}, {2}, {3};".format(museum_name, session.get('user'), )
+    print(query)
+
 
 @app.route('/myAccount')
 def manageAccount():
