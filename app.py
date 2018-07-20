@@ -218,7 +218,8 @@ def loggedin():
     museumname = request.form.get('museumname')
     isCurator = request.args.get('isCurator')
     isAdmin = request.args.get('isAdmin')
-    email = request.args.get('email')
+
+    email = session.get('user')
     museum_list = None
     no_museums = None
 
@@ -463,7 +464,86 @@ def curatorRequested():
 @app.route('/reviewCuratorRequests')
 def reviewCuratorRequests():
     error = request.args.get('error')
-    return render_template('reviewRequests.html', error=error)
+
+    query = "SELECT * FROM museumdb.curator_request;"
+
+    try:
+        cursor.execute(query)
+        curator_requests = cursor.fetchall()
+    except Exception as e:
+        print(e.msg)
+        query = "rollback;"
+        cursor.execute(query)
+        error = 'There was an error retrieving curator requests.'
+        return redirect(url_for('loggedin', isAdmin=1, email=session.get('user'), error=error))
+
+    return render_template('reviewRequests.html', curator_requests=curator_requests, error=error)
+
+@app.route('/adminHome')
+def adminHome():
+    error = request.args.get('error')
+    return redirect(url_for('loggedin', isAdmin=1, email=session.get('user'), error=error))
+
+@app.route('/approveRequest/<email>', methods=['POST'])
+def approveRequest(email):
+    email = email
+
+    # update the visitor table
+    updateQuery = "UPDATE museumdb.visitors SET isCurator=1 WHERE email='{0}';".format(email)
+    # remove the request from the curator request table
+    deleteQuery = "DELETE FROM museumdb.curator_request WHERE visitorEmail='{0}';".format(email)
+
+    query = "SELECT * FROM museumdb.curator_request;"
+
+    try:
+        cursor.execute(updateQuery)
+        error = "Request successfully approved."
+        conn.commit()
+        cursor.execute(deleteQuery)
+        conn.commit()
+
+        cursor.execute(query)
+        curator_requests = cursor.fetchall()
+
+    except Exception as e:
+        print(e.msg)
+        query = "rollback;"
+        cursor.execute(query)
+        query2 = "SELECT * FROM museumdb.curator_request;"
+        cursor.execute(query2)
+        curator_requests = cursor.fetchall()
+        error = 'There was an approving the curator requests.'
+
+    return redirect(url_for('reviewCuratorRequests', curator_requests=curator_requests, error=error))
+
+@app.route('/denyRequest/<email>', methods=['POST'])
+def denyRequest(email):
+    email=email
+
+    # there is no update to be done
+    # remove the request from the curator request table
+    deleteQuery = "DELETE FROM museumdb.curator_request WHERE visitorEmail='{0}';".format(email)
+
+    query = "SELECT * FROM museumdb.curator_request;"
+
+    try:
+        cursor.execute(deleteQuery)
+        conn.commit()
+        error = "Request successfully denied."
+
+        cursor.execute(query)
+        curator_requests = cursor.fetchall()
+
+    except Exception as e:
+        print(e.msg)
+        query = "rollback;"
+        cursor.execute(query)
+        query2 = "SELECT * FROM museumdb.curator_request;"
+        cursor.execute(query2)
+        curator_requests = cursor.fetchall()
+        error = 'There was an approving the curator requests.'
+
+    return redirect(url_for('reviewCuratorRequests', curator_requests=curator_requests, error=error))
 
 # delete museum
 @app.route('/deleteMuseum')
