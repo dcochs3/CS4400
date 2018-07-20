@@ -117,6 +117,11 @@
                     {% if isAdmin %}
                         <h3>Welcome, {{email}}!</h3>
 
+                        {% if error %}
+                            <p class="error" style="color:red;"><strong>*</strong> {{ error }}
+                        {% endif %}
+
+
                         <form action='/reviewCuratorRequests'>
                             <div class="form-group">
                                 <button type="submit" name="review-requests-button" class="btn" id="review-requests-button" value="Review">Review Curator Requests</button>
