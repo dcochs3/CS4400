@@ -82,13 +82,14 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <div style="text-align:center;">
-                            <!-- Leave a Review BUTTON -->
-                            <button type="button" name="leave-review-button" class="btn" id="leave-review-button" value="Review" data-toggle="modal" data-target="#leave-review-modal">Review Museum</button>
+                    <form method=GET action='/checkReviews/{{museum_name}}'>
+                        <div class="form-group">
+                            <div style="text-align:center;">
+                                <!-- Leave a Review BUTTON -->
+                                <button type="button" name="leave-review-button" class="btn" id="leave-review-button" value="Review" data-toggle="modal" data-target="#leave-review-modal">Review Museum</button>
+                            </div>
                         </div>
-                    </div>
-
+                    </form>
                     <form method=POST action='/viewReviews/{{museum_name}}'>
                         <div class="form-group">
                             <!-- View all Reviews BUTTON -->
@@ -142,7 +143,7 @@
                                     </button>
                                 </div>
 
-                                <form method=POST action='/museum/{{museum_name}}'>
+                                <form method=POST action='/addReview/{{museum_name}}'>
                                     <div class="modal-body">
                                         <div class="form-group">
                                             <p class="error-message"></p>

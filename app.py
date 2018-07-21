@@ -2,6 +2,7 @@ from __future__ import print_function
 from flask import Flask, flash, redirect, render_template, request, session, abort, url_for, json, send_file
 import os, mysql.connector
 from mysql.connector import errorcode
+import jackfunc as jf
 #from urllib.parse import urlparse
 
 #for current date
@@ -405,12 +406,48 @@ def addExhibit(museum_name):
     isCurator = None
     museum_info = None
     curator_email = session.get('user')
-    query =  "INSERT INTO museumDB.exhibit VALUES ('{0}', '{1}', {2}, '{3}', '{4}');".format(museumname, exhibitname, year, link, curator_email)
+
+    query =  "INSERT INTO exhibit VALUES ('{0}', '{1}', {2}, '{3}', '{4}');".format(museumname, exhibitname, year, link, curator_email)
     try:
         cursor.execute(query)
-    except Exception as e:
-        print(e.msg)
+        conn.commit()
+    except AttributeError as e:
+        print(str(e))
     return redirect(url_for('specificMuseum', museum_name=museumname, isCurator=isCurator))
+
+@app.route('/checkReviews/<museum_name>', methods=['GET'])
+def checkReviews(museum_name):
+    print("Got to Check Reviews")
+    redirect(url_for("addReview", museum_name=museum_name, old_comment="", old_rating=-1))
+
+@app.route('/addReview/<museum_name>/<comment>/<rating>', methods=['POST'])
+def addReview(museum_name, old_comment, old_rating):
+
+    comment = request.form['description']
+    rating = request.form['rating']
+    visitor_email = session.get('user')
+    isCurator = None
+    bought_ticket_query = "SELECT * FROM ticket WHERE museumName = '{0}' AND visitorEmail = '{1}'".format(museum_name, visitor_email)
+    cursor.execute(bought_ticket_query)
+    ticket = cursor.fetchall()
+    bought_ticket = len(ticket) > 0
+    if bought_ticket:
+        select_review_query = "SELECT * FROM review WHERE museumName = '{0}' AND visitorEmail = '{1}';".format(museum_name, visitor_email)
+        cursor.execute(select_query)
+        review = cursor.fetchall()
+        if len(review) > 0:
+            print("already a review")
+            #redirect(url_for())
+        else:
+            query = "INSERT INTO museumDB.review VALUES ('{0}', '{1}', '{2}', {3});".format(museum_name, visitor_email, comment, rating)
+            cursor.execute(query)
+            conn.commit()
+
+    else:
+        print("buy a ticket pls")
+        #Tell the user they have to buy a ticket
+
+    return redirect(url_for('specificMuseum', museum_name=museum_name, isCurator=isCurator)) 
 
 @app.route('/viewReviews/<museum_name>', methods=['POST'])
 def viewReviews(museum_name):
