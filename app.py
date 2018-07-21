@@ -485,7 +485,12 @@ def logout():
 
 @app.route('/myTickets')
 def myTickets():
-    return render_template('myTickets.html')
+    visitor_email = session.get('user')
+    query = "SELECT * FROM ticket WHERE visitorEmail = '{0}';".format(visitor_email)
+    cursor.execute(query)
+    tickets = cursor.fetchall()
+    conn.commit()
+    return render_template('myTickets.html', tickets=tickets)
 
 @app.route('/myReviews')
 def myReviews():
