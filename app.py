@@ -378,15 +378,28 @@ def specificMuseum(museum_name):
     isCurator = request.args.get('isCurator')
     museum_info = None
     museum_exists = None
+    visitor_email = session.get('user')
+    purchasedTicket = None
+
 
     query1 = "SELECT * FROM museumdb.museum WHERE museumName = '{0}';".format(museumname)
     query = "SELECT exhibitName, year, url FROM museumdb.exhibit WHERE museumName = '{0}';".format(museumname)
+    purchasedTicketQuery = "SELECT * FROM ticket WHERE visitorEmail = '{0}' AND museumName = '{1}';".format(visitor_email, museumname)
 
     try:
         cursor.execute(query1)
         museum_exists = cursor.fetchone()
         cursor.execute(query)
         museum_info = cursor.fetchall()
+
+        cursor.execute(purchasedTicketQuery)
+        tickets = cursor.fetchall()
+
+        if len(tickets) == 0:
+            purchasedTicket = 0
+        else:
+            purchasedTicket = 1
+
     except:
         print('Error')
 
@@ -395,7 +408,7 @@ def specificMuseum(museum_name):
         error = "There is no museum with that name."
         return redirect(url_for('loggedin', error=error))
 
-    return render_template('specificMuseum.html', museum_name=museumname, isCurator=isCurator, museum_info=museum_info)
+    return render_template('specificMuseum.html', museum_name=museumname, isCurator=isCurator, museum_info=museum_info, purchasedTicket=purchasedTicket)
 
 @app.route('/addExhibit/<museum_name>', methods=['POST'])       
 def addExhibit(museum_name):
@@ -494,7 +507,12 @@ def myTickets():
 
 @app.route('/myReviews')
 def myReviews():
-    return render_template('myReviews.html')
+    visitor_email = session.get('user')
+    query = "SELECT * FROM review WHERE visitorEmail = '{0}';".format(visitor_email)
+    cursor.execute(query)
+    reviews = cursor.fetchall()
+    conn.commit()
+    return render_template('myReviews.html', reviews=reviews)
 
 @app.route('/curatorRequest')
 def curatorRequest():

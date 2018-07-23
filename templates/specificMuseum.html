@@ -112,7 +112,13 @@
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title">Ticket Confirmation</h5>
+
+                                    {% if purchasedTicket %}
+                                        <h5 class="modal-title">Ticket Already Purchased</h5>
+                                    {% else %}
+                                        <h5 class="modal-title">Ticket Confirmation</h5>
+                                    {% endif %}
+
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -122,9 +128,15 @@
                                     <div class="modal-body">
                                         <div class="form-group">
                                             <p class="error-message"></p>
-                                            Thank you for purchasing a ticket to {{museum_name}}.
-                                            </br>
-                                            Check your email for the ticket!
+
+                                            {% if purchasedTicket %}
+                                                You have already purchased a ticket to this museum!
+                                            {% else %}
+                                                Thank you for purchasing a ticket to {{museum_name}}.
+                                                </br>
+                                                Check your email for the ticket!
+                                            {% endif %}
+
                                         </div>
                                     </div>
                                 </form>

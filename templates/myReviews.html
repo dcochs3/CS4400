@@ -29,7 +29,36 @@
                     {% endif %}
 
 
+                    <div class="container">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Museum</th>
+                                    <th>Comment</th>
+                                    <th>Rating</th>
+                                </tr>
+                            </thead>
+                            <tbody>
 
+
+                                <!-- TO DO -->
+                                <!-- for each museum -->
+                                {% for review in reviews %}
+                                <tr>
+                                    <td>
+                                        <a href="/museum/{{review[0]}}">{{review[0]}}</a>
+                                    </td>
+                                    <td>
+                                        {{review[2]}}
+                                    </td>
+                                    <td>
+                                        {{review[3]}} / 5
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
 
 
                     <form action='/back'>
