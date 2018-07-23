@@ -52,14 +52,15 @@
                         </div>
                     </form>
 
-                    <!-- TODO -->
                     <!-- if curator -->
-                    <form action='/myMuseums'>
-                        <div class="form-group">
-                            <!-- View all Reviews BUTTON -->
-                            <button type="submit" name="my-museums-button" class="btn" id="my-museums-button" value="Museums">My Museums</button>
-                        </div>
-                    </form>
+                    {% if isCurator %}
+                        <form action='/myMuseums'>
+                            <div class="form-group">
+                                <!-- View all Reviews BUTTON -->
+                                <button type="submit" name="my-museums-button" class="btn" id="my-museums-button" value="Museums">My Museums</button>
+                            </div>
+                        </form>
+                    {% endif %}
 
                     <form action='/logout'>
                         <div class="form-group">
