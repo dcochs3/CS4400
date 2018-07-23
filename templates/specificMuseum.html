@@ -124,7 +124,7 @@
                                     </button>
                                 </div>
 
-                                <form method=POST action="/purchasedTicket">
+                                <form method=POST action="/purchasedTicket/{{museum_name}}">
                                     <div class="modal-body">
                                         <div class="form-group">
                                             <p class="error-message"></p>
@@ -134,12 +134,20 @@
                                             {% else %}
                                                 Thank you for purchasing a ticket to {{museum_name}}.
                                                 </br>
-                                                Check your email for the ticket!
-                                            {% endif %}
+                                                In order to complete your purchase, press submit!
+                                                </br>
+                                                To cancel, press the x in the top right corner.
 
+                                                <div class="modal-footer">
+                                                    <button class="btn btn-primary" name="submit-museum-button" id="submit-museum-button" type="submit">Submit</button>
+                                                </div>
+
+                                            {% endif %}
                                         </div>
                                     </div>
+
                                 </form>
+
                             </div>
                         </div>
                     </div>

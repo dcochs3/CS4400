@@ -2,6 +2,8 @@ from __future__ import print_function
 from flask import Flask, flash, redirect, render_template, request, session, abort, url_for, json, send_file
 import os, mysql.connector
 from mysql.connector import errorcode
+import datetime
+from random import randint
 import jackfunc as jf
 #from urllib.parse import urlparse
 
@@ -475,12 +477,25 @@ def viewReviews(museum_name):
     return render_template('viewReviews.html', reviews=reviews, museum_name=museum_name)
 
 
-@app.route('/purchasedTicket', methods=['POST'])
+@app.route('/purchasedTicket/<museum_name>', methods=['POST'])
 def purchaseTicket(museum_name):
-    query = "INSERT INTO museumDB.ticket (museumName, visitorEmail, price, purchaseTimeStamp) VALUES "
-    query += "{0}, {1}, {2}, {3};".format(museum_name, session.get('user'), )
-    print(query)
+    museum_name = museum_name
+    visitor_email = session.get('user')
+    isCurator = request.args.get('isCurator')
+    price = randint(0, 25)
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    query = "INSERT INTO museumdb.ticket (museumName, visitorEmail, price, purchaseTimeStamp) VALUES "
+    query += "('{0}', '{1}', {2}, '{3}');".format(museum_name, visitor_email, price, timestamp)
+    error = request.args.get('error')
 
+    try:
+        cursor.execute(query)
+        conn.commit()
+        error="Purchase successful."
+    except Exception as e:
+        print(e)
+
+    return redirect(url_for('specificMuseum', museum_name=museum_name, isCurator=isCurator, error=error))
 
 @app.route('/myAccount')
 def manageAccount():
