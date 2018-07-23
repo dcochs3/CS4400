@@ -59,7 +59,7 @@
                                     {% if isCurator %}
                                         <td>
                                             <!-- TODO action -->
-                                            <form method=POST action='/removeExhibit/{{exhibit[0]}}'>
+                                            <form method=POST action='/removeExhibit/{{museum_name}}/{{exhibit[0]}}'>
                                                 <div style="text-align:center;">
                                                     <button type="submit" name="remove-exhibit-button" class="btn" id="remove-exhibit-button" value="Remove">Remove</button>
                                                 </div>
