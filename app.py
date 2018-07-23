@@ -499,7 +499,8 @@ def purchaseTicket(museum_name):
 
 @app.route('/myAccount')
 def manageAccount():
-    return render_template('account.html')
+    email = session.get('user')
+    return render_template('account.html', email=email)
 
 @app.route('/back')
 def back():
@@ -735,6 +736,25 @@ def actionDeleteMuseum(museum_name):
 
     return redirect(url_for('loggedin', error=error, isAdmin=1))
 
+@app.route('/myMuseums')
+def myMuseums():
+    visitorEmail = session.get('user')
+    query = "SELECT museumName FROM museum WHERE curatorEmail='{0}';".format(visitorEmail)
+    query1 = "SELECT museumName, AVG(rating) FROM review GROUP BY museumName;"
+    query2 = "SELECT museumName, COUNT(exhibitName) FROM exhibit GROUP BY museumName;"
+
+    try:
+        cursor.execute(query)
+        museum_list = cursor.fetchall()
+        cursor.execute(query1)
+        averageRatings = cursor.fetchall()
+        cursor.execute(query2)
+        exhibitCounts = cursor.fetchall()
+    except Exception as e:
+        query = "rollback;"
+        cursor.execute(query)
+
+    return render_template('myMuseums.html', museum_list=museum_list, averageRatings=averageRatings, exhibitCounts=exhibitCounts)
 
 if __name__ == "__main__":
     app.jinja_env.add_extension('jinja2.ext.do')
