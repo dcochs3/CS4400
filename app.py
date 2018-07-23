@@ -377,9 +377,9 @@ def specificMuseum(museum_name, isCurator):
 	museum_exists = None
 	visitor_email = session.get('user')
 	purchasedTicket = None
-    query1 = "SELECT * FROM museumdb.museum WHERE museumName = '{0}';".format(museumname)
-    query = "SELECT exhibitName, year, url FROM museumdb.exhibit WHERE museumName = '{0}';".format(museumname)
-    purchasedTicketQuery = "SELECT * FROM ticket WHERE visitorEmail = '{0}' AND museumName = '{1}';".format(visitor_email, museumname)
+	query1 = "SELECT * FROM museumdb.museum WHERE museumName = '{0}';".format(museumname)
+	query = "SELECT exhibitName, year, url FROM museumdb.exhibit WHERE museumName = '{0}';".format(museumname)
+	purchasedTicketQuery = "SELECT * FROM ticket WHERE visitorEmail = '{0}' AND museumName = '{1}';".format(visitor_email, museumname)
 
 
 	try:
@@ -500,24 +500,24 @@ def purchaseTicket(museum_name):
 
 @app.route('/myAccount')
 def manageAccount():
-    email = session.get('user')
-    isCurator = None
+	email = session.get('user')
+	isCurator = None
 
-    query1 = "SELECT isCurator FROM museumdb.visitor WHERE email = '{0}';".format(email);
+	query1 = "SELECT isCurator FROM museumdb.visitor WHERE email = '{0}';".format(email);
 
-    try:
-        cursor.execute(query1)
-        isCurator = cursor.fetchone()
-        isCurator = isCurator[0]
+	try:
+		cursor.execute(query1)
+		isCurator = cursor.fetchone()
+		isCurator = isCurator[0]
 
-    except Exception as e:
-        print(e.msg)
-        query = "rollback;"
-        cursor.execute(query)
-        error = 'Error.'
-        return redirect(url_for('welcome', error=error))
+	except Exception as e:
+		print(e.msg)
+		query = "rollback;"
+		cursor.execute(query)
+		error = 'Error.'
+		return redirect(url_for('welcome', error=error))
 
-    return render_template('account.html', email=email, isCurator=isCurator)
+	return render_template('account.html', email=email, isCurator=isCurator)
 
 
 @app.route('/back')
@@ -736,6 +736,12 @@ def typeDeleteMuseum():
 
 	return redirect(url_for('loggedin', error=error, isAdmin=1))
 
+@app.route('/deleteAccount/<email>', methods=['POST'])
+def deleteAccount(email):
+	del_query = "DELETE FROM visitor WHERE email = '{0}'".format(email)
+	cursor.execute(del_query)
+	conn.commit()
+	return render_template('login.html', error=None)
 
 @app.route('/actionDeleteMuseum/<museum_name>')
 def actionDeleteMuseum(museum_name):
