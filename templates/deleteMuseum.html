@@ -1,2 +1,99 @@
 <!-- ADMIN -->
 
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Delete Museum - Barcelona Museums Ticketing & Review System</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+        <!-- Tether -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+        <!-- Our CSS -->
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/museumStyle.css') }}">
+
+        <!-- Navbar functions -->
+        <script src="{{ url_for('static',filename='navbar.js') }}"></script>
+
+    </head>
+    <body>
+        <!--SEARCH BAR-->
+        {% include 'navbar.html' %}
+        <div class="container-fluid">
+            <div class="row">
+                <div class="add-container offset-2 col-8">
+
+                    <h3>Select a Museum to Delete</h3>
+                    {% if error %}
+                        <p class="error" style="color:red;"><strong>*</strong> {{ error }}
+                    {% endif %}
+
+                    <form method=POST action='/typeDeleteMuseum'>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    {% if no_museums %}
+                                        <input type="museumname" name="museumname" class="form-control" id="del-mus-name" placeholder="No museums currently exist!" disabled="disabled">
+                                    {% else %}
+                                        <input type="museumname" name="museumname" class="form-control" id="del-mus-name" placeholder="Type the Museum Name" >
+                                    {% endif %}
+                                </div>
+
+                                OR
+
+                                {% if no_museums %}
+
+                                    <div class="col-md-5">
+                                        <div class="dropdown">
+                                              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled="disabled">
+                                                Select Museum
+                                              </button>
+                                        </div>
+                                    </div>
+
+                                {% else %}
+                                    <div class="col-md-5">
+                                        <div class="dropdown">
+                                              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Select Museum
+                                              </button>
+                                              <!-- LIST OF MUSEUMS -->
+                                              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                {% for museum in museum_list %}
+
+                                                    <a class="dropdown-item" href="/actionDeleteMuseum/{{museum|first}}">{{museum|first}}</a>
+                                                {% endfor %}
+                                              </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+                                {% if no_museums %}
+                                    <div class="col-md-1">
+                                        <span class="form-group">
+                                            <button class="btn" type="submit" name="delete-museum-button" id="delete-museum-button" value="Delete" disabled="disabled">Delete</button>
+                                        </span>
+                                    </div>
+                                {% else %}
+
+                                    <div class="col-md-1">
+                                        <span class="form-group">
+                                            <button class="btn" type="submit" name="delete-museum-button" id="delete-museum-button" value="Delete">Delete</button>
+                                        </span>
+                                    </div>
+                                {% endif %}
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

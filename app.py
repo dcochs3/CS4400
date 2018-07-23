@@ -63,7 +63,7 @@ TABLES['visitor'] = (
 TABLES['museum'] = (
     "CREATE TABLE `museum` ("
     "   `museumName` varchar(255) NOT NULL,"
-    "   `curatorEmail` varchar(255) NOT NULL,"
+    "   `curatorEmail` varchar(255),"
     "   PRIMARY KEY (`museumName`),"
     "   FOREIGN KEY (`curatorEmail`) REFERENCES `visitor` (`email`)"
     ")")
@@ -600,11 +600,107 @@ def denyRequest(email):
 
     return redirect(url_for('reviewCuratorRequests', curator_requests=curator_requests, error=error))
 
+# add museum
+@app.route('/addMuseum', methods=['POST'])
+def addMuseum():
+    museum_name = request.form['input-museumname']
+    error = request.args.get('error')
+
+    # if already exists, error
+    selectQuery = "SELECT * FROM museumdb.museum WHERE museumName='{0}';".format(museum_name)
+
+    # add to the database
+    # museumName // curatorEmail
+    insertQuery = "INSERT into museumdb.museum values ('{0}', NULL);".format(museum_name)
+
+    try:
+        cursor.execute(insertQuery)
+        conn.commit()
+
+        error = "Museum successfully added."
+    except Exception as e:
+        print(e.msg)
+        query = "rollback;"
+        cursor.execute(query)
+
+        cursor.execute(selectQuery)
+        museum = cursor.fetchone()
+        if museum is not '':
+            error = 'The museum already exists!'
+        else:
+            # if other error
+            error = 'There was an error adding the museum.'
+
+    return redirect(url_for('loggedin', error=error, isAdmin=1))
+
 # delete museum
 @app.route('/deleteMuseum')
 def deleteMuseum():
     error = request.args.get('error')
-    return render_template('deleteMuseum.html', error=error)
+    museum_list = None
+    no_museums = None
+
+    query = "SELECT museumName FROM museum;"
+    try:
+        cursor.execute(query)
+        museum_list = cursor.fetchall()
+
+        if len(museum_list) == 0:
+            no_museums = True
+
+    except Exception as e:
+        query = "rollback;"
+        cursor.execute(query)
+
+    return render_template('deleteMuseum.html', error=error, museum_list=museum_list, no_museums=no_museums)
+
+@app.route('/typeDeleteMuseum', methods=["POST"])
+def typeDeleteMuseum():
+    museum_name = request.form.get('museumname')
+    print(museum_name)
+    error = request.args.get('error')
+
+    # check the museum they typed exists
+    selectQuery = "SELECT * FROM museumdb.museum WHERE museumName='{0}';".format(museum_name)
+
+    query = "DELETE FROM museumdb.museum WHERE museumName='{0}';".format(museum_name)
+    try:
+        cursor.execute(selectQuery)
+        museum = cursor.fetchone()
+        if museum_name == '':
+            error = "Please enter/select a museum name."
+            return redirect(url_for('deleteMuseum', error=error))
+        if museum is None:
+            error = "No museum exists with that name."
+            return redirect(url_for('deleteMuseum', error=error))
+        else:
+            cursor.execute(query)
+            conn.commit()
+            error = "Museum successfully deleted!"
+    except Exception as e:
+        query = "rollback;"
+        cursor.execute(query)
+        error = "There was an error deleting the museum."
+
+    return redirect(url_for('loggedin', error=error, isAdmin=1))
+
+
+@app.route('/actionDeleteMuseum/<museum_name>')
+def actionDeleteMuseum(museum_name):
+    museum_name=museum_name
+    error = request.args.get('error')
+
+    query = "DELETE FROM museumdb.museum WHERE museumName='{0}';".format(museum_name)
+    try:
+        cursor.execute(query)
+        conn.commit()
+        error = "Museum successfully deleted!"
+    except Exception as e:
+        query = "rollback;"
+        cursor.execute(query)
+        error = "There was an error deleting the museum."
+
+    return redirect(url_for('loggedin', error=error, isAdmin=1))
 
 
 if __name__ == "__main__":
