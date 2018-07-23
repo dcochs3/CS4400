@@ -59,7 +59,7 @@
                                     {% if isCurator %}
                                         <td>
                                             <!-- TODO action -->
-                                            <form action='/removeExhibit'>
+                                            <form method=POST action='/removeExhibit/{{exhibit[0]}}'>
                                                 <div style="text-align:center;">
                                                     <button type="submit" name="remove-exhibit-button" class="btn" id="remove-exhibit-button" value="Remove">Remove</button>
                                                 </div>
@@ -99,12 +99,14 @@
 
                     <!-- TODO -->
                     <!-- if isCurator -->
-                    <div class="form-group">
-                        <div style="text-align:center;">
-                            <!-- Add Exhibit BUTTON -->
-                            <button type="button" name="add-exhibit-button" class="btn" id="add-exhibit-button" value="Add" data-toggle="modal" data-target="#add-exhibit-modal">Add Exhibit</button>
+                    {% if isCurator %}
+                        <div class="form-group">
+                            <div style="text-align:center;">
+                                <!-- Add Exhibit BUTTON -->
+                                <button type="button" name="add-exhibit-button" class="btn" id="add-exhibit-button" value="Add" data-toggle="modal" data-target="#add-exhibit-modal">Add Exhibit</button>
+                            </div>
                         </div>
-                    </div>
+                    {% endif %}
 
 
                     <!-- Purchase Ticket pop-up -->

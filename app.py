@@ -11,7 +11,6 @@ import jackfunc as jf
 import datetime
 
 app = Flask(__name__)
-
 app.secret_key = '\x12\x9e8/\xfb\x86p\x91\xd9\xf2\xac\xf8U\xf1\xc87`\x87\x95\x18*)\xb2\xac'
 
 #team password: jdrn4533
@@ -36,7 +35,7 @@ initDB = "CREATE DATABASE IF NOT EXISTS {}".format(databaseName)
 try:
     cursor.execute(initDB)
 except Exception as e:
-    print(e.msg)
+    print(str(e))
 
 conn.database = databaseName
 
@@ -157,7 +156,6 @@ def login():
     #verify the credentials
     email = request.form['email']
     password = request.form['password']
-    isCurator = None
     error = None
     visitor_list = None
     admin_list = None
@@ -173,7 +171,7 @@ def login():
         visitor_list = cursor.fetchone()
         cursor.execute(query1)
         isCurator = cursor.fetchone()
-
+        isCurator = isCurator[0]
         # from admin table
         cursor.execute(adminquery)
         admin_list = cursor.fetchone()
@@ -201,7 +199,7 @@ def login():
             session.SESSION_EXPIRE_AT_BROWSER_CLOSE = True
             isAdmin = 1
     except Exception as e:
-        print(e.msg)
+        print(str(e))
         query = "rollback;"
         cursor.execute(query)
         error = 'The email or password you have entered is incorrect.'
@@ -218,10 +216,9 @@ def login():
 @app.route('/home')
 def loggedin():
     error = request.args.get('error')
-    museumname = request.form.get('museumname')
     isCurator = request.args.get('isCurator')
+    museumname = request.form.get('museumname')
     isAdmin = request.args.get('isAdmin')
-
     email = session.get('user')
     museum_list = None
     no_museums = None
@@ -337,7 +334,6 @@ def allMuseums():
     error = None
     isCurator = request.args.get('isCurator')
 
-
     query = "SELECT museumName FROM museum;"
     query1 = "SELECT museumName, AVG(rating) FROM review GROUP BY museumName;"
 
@@ -374,10 +370,9 @@ def getMuseumName():
     else:
         return redirect(url_for('specificMuseum', museum_name=museum_name, isCurator=isCurator))
 
-@app.route('/museum/<museum_name>', methods=['POST', "GET"])
-def specificMuseum(museum_name):
+@app.route('/museum/<museum_name>/<isCurator>', methods=['POST', "GET"])
+def specificMuseum(museum_name, isCurator):
     museumname = museum_name
-    isCurator = request.args.get('isCurator')
     museum_info = None
     museum_exists = None
     visitor_email = session.get('user')
@@ -409,7 +404,7 @@ def specificMuseum(museum_name):
         # that museum entered does not exist in the database
         error = "There is no museum with that name."
         return redirect(url_for('loggedin', error=error))
-
+    print(type(isCurator))
     return render_template('specificMuseum.html', museum_name=museumname, isCurator=isCurator, museum_info=museum_info, purchasedTicket=purchasedTicket)
 
 @app.route('/addExhibit/<museum_name>', methods=['POST'])       
@@ -476,6 +471,9 @@ def viewReviews(museum_name):
         print('Error')    
     return render_template('viewReviews.html', reviews=reviews, museum_name=museum_name)
 
+@app.route('/removeExhibit/<exhibitname>', methods=['POST'])
+def removeExhibit(exhibitname):
+	delete_query = "DELETE FROM exhibit WHERE exhibitName = "
 
 @app.route('/purchasedTicket/<museum_name>', methods=['POST'])
 def purchaseTicket(museum_name):
