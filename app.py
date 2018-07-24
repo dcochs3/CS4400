@@ -320,6 +320,7 @@ def allMuseums():
     error = None
     isCurator = request.args.get('isCurator')
 
+
     query = "SELECT museumName FROM museum;"
     query1 = "SELECT museumName, AVG(rating) FROM review GROUP BY museumName;"
 
@@ -527,8 +528,6 @@ def deleteReview(museum_name):
     return redirect(url_for('specificMuseum', museum_name=museum_name, isCurator=0, error=error))
 
 
-
-
 @app.route('/viewReviews/<museum_name>', methods=['POST'])
 def viewReviews(museum_name):
     museum_name = museum_name
@@ -635,23 +634,27 @@ def myReviews():
     conn.commit()
     return render_template('myReviews.html', reviews=reviews)
 
-@app.route('/curatorRequest')
-def curatorRequest():
-    error = request.args.get('error')
-    return render_template('curatorRequest.html', error=error)
 
-@app.route('/postcuratorRequest', methods=["POST"])
-def curatorRequested():
-    # if TODO:
-    # error = "You are already a curator for that museum!"
+@app.route('/curatorRequest/<email>/<error>')
+def curatorRequest(email, error):
+	museum_query = "SELECT museumName FROM museum"
+	cursor.execute(museum_query)
+	museum_list = cursor.fetchall()
+	conn.commit()
+	return render_template('curatorRequest.html', museum_list=museum_list, email=email, error=error)
 
-    error = "Request successfully submitted!"
-    return redirect(url_for('curatorRequest', error=error))
-
-
-
-
-
+@app.route('/postCuratorRequest/<museum_name>/<email>')
+def curatorRequested(museum_name, email):
+	# if TODO:
+	insert_query = "INSERT INTO curator_request VALUES ('{0}', '{1}');".format(museum_name, email)
+	try:
+		cursor.execute(insert_query)
+		conn.commit
+		error = "Request successfully submitted!"
+	except Exception as e:
+		error = str(e)
+		#error = "You are already a curator for that museum!" 
+	return redirect(url_for('curatorRequest', email=email, error=error))
 
 # ADMIN FUNCTIONS (DANA)
 # review curator requests
