@@ -114,6 +114,17 @@
                         </div>
                     </form>
 
+                    <form method=POST action='/deleteReview/{{museum_name}}'>
+                        <div class="form-group">
+                            <div style="text-align:center;">
+
+                                <!--Go back to specific museum page-->
+                                <button type="submit" name="all-museums-button" class="btn" id="all-museums-button" value="Delete">Delete Review</button>
+                            </div>
+                        </div>
+                    </form>
+
+
                     <form method=POST action='/specificMuseum/{{museum_name}}'>
                         <div class="form-group">
                             <div style="text-align:center;">

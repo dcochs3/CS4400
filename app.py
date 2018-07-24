@@ -66,7 +66,7 @@ TABLES['museum'] = (
     "   `museumName` varchar(255) NOT NULL,"
     "   `curatorEmail` varchar(255),"
     "   PRIMARY KEY (`museumName`),"
-    "   FOREIGN KEY (`curatorEmail`) REFERENCES `visitor` (`email`)"
+    "   FOREIGN KEY (`curatorEmail`) REFERENCES `visitor` (`email`) ON DELETE CASCADE"
     ")")
 
 TABLES['curator_request'] = (
@@ -431,8 +431,7 @@ def reviewMuseum(museum_name):
 
     except:
         print('Error')
-
-    print(review_info)
+        
     return render_template('writeReview.html', error=error, museum_name=museum_name, museumReviewed=museumReviewed, review_info=review_info)
 
 @app.route('/newReview/<museum_name>', methods=['POST'])
@@ -460,17 +459,14 @@ def newReview(museum_name):
 
 
 @app.route('/editReview/<museum_name>', methods=['POST'])
-def editMuseum(museum_name):
+def editReview(museum_name):
     museum_name = museum_name
     visitor_email = session.get('user')
     error = request.args.get('error')
     comment = request.form.get('description')
     rating = request.form.get('rating')
 
-    print(comment)
-    print(rating)
     updateQuery = "UPDATE museumdb.review SET comment='{0}', rating={1} WHERE visitorEmail='{2}' AND museumName='{3}';".format(comment, rating, visitor_email, museum_name)
-    print(updateQuery)
 
     try:
         cursor.execute(updateQuery)
@@ -483,6 +479,30 @@ def editMuseum(museum_name):
         error = 'There was an error updating your review.'
 
     return redirect(url_for('specificMuseum', museum_name=museum_name, isCurator=0, error=error))
+
+
+@app.route('/deleteReview/<museum_name>', methods=['POST'])
+def deleteReview(museum_name):
+    museum_name = museum_name
+    visitor_email = session.get('user')
+    error = request.args.get('error')
+
+    delete_query = "DELETE FROM review WHERE museumName = '{0}' AND visitorEmail = '{1}';".format(museum_name, visitor_email)
+
+    try:
+        cursor.execute(delete_query)
+        conn.commit()
+        error="Review successfully deleted."
+    except Exception as e:
+        print(e)
+        query = "rollback;"
+        cursor.execute(query)
+        error = 'There was an error deleting your review.'
+
+    return redirect(url_for('specificMuseum', museum_name=museum_name, isCurator=0, error=error))
+
+
+
 
 @app.route('/viewReviews/<museum_name>', methods=['POST'])
 def viewReviews(museum_name):
