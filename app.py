@@ -107,7 +107,7 @@ TABLES['exhibit'] = (
     "   `exhibitName` varchar(255) NOT NULL,"
     "   `year` char(4) NOT NULL,"
     "   `url` varchar(2083),"
-    "   `curatorEmail` varchar(255) NOT NULL,"
+    "   `curatorEmail` varchar(255),"
     "   PRIMARY KEY (`museumName`, `exhibitName`),"
     "   FOREIGN KEY (`museumName`) REFERENCES `museum` (`museumName`) ON DELETE CASCADE,"
     "   FOREIGN KEY (`curatorEmail`) REFERENCES `visitor` (`email`) ON DELETE CASCADE"
