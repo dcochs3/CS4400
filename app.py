@@ -369,7 +369,7 @@ def specificMuseum(museum_name):
 
     query1 = "SELECT * FROM museumdb.museum WHERE museumName = '{0}';".format(museumname)
     query = "SELECT exhibitName, year, url FROM museumdb.exhibit WHERE museumName = '{0}';".format(museumname)
-    curator_query = "SELECT * FROM visitor WHERE email = '{0}' AND isCurator = 1".format(visitor_email)
+    curator_query = "SELECT * FROM visitor JOIN museum ON email=curatorEmail WHERE email='{0}'".format(visitor_email)
     purchasedTicketQuery = "SELECT * FROM ticket WHERE visitorEmail = '{0}' AND museumName = '{1}';".format(visitor_email, museumname)
     print(curator_query)
     try:
