@@ -705,8 +705,10 @@ def approveRequest(email):
     try:
         cursor.execute(exists)
         curators = cursor.fetchone()
+        curators = curators[0]
         print(curators)
         if curators is not None:
+            curators
             cursor.execute(query)
             curator_requests = cursor.fetchall()
 
