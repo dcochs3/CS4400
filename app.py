@@ -364,6 +364,7 @@ def specificMuseum(museum_name):
     visitor_email = session.get('user')
     purchasedTicket = None
     isCurator=1
+    error = request.args.get('error')
 
     query1 = "SELECT * FROM museumdb.museum WHERE museumName = '{0}';".format(museumname)
     query = "SELECT exhibitName, year, url FROM museumdb.exhibit WHERE museumName = '{0}';".format(museumname)
@@ -390,7 +391,7 @@ def specificMuseum(museum_name):
         # that museum entered does not exist in the database
         error = "There is no museum with that name."
         return redirect(url_for('loggedin', error=error))
-    return render_template('specificMuseum.html', museum_name=museumname, isCurator=isCurator, museum_info=museum_info, purchasedTicket=purchasedTicket)
+    return render_template('specificMuseum.html', museum_name=museumname, isCurator=isCurator, museum_info=museum_info, purchasedTicket=purchasedTicket, error=error)
 
 @app.route('/addExhibit/<museum_name>', methods=['POST'])       
 def addExhibit(museum_name):
@@ -401,14 +402,21 @@ def addExhibit(museum_name):
     isCurator = None
     museum_info = None
     curator_email = session.get('user')
+    error = request.args.get('error')
 
     query =  "INSERT INTO exhibit VALUES ('{0}', '{1}', {2}, '{3}', '{4}');".format(museumname, exhibitname, year, link, curator_email)
     try:
         cursor.execute(query)
         conn.commit()
-    except AttributeError as e:
-        print(str(e))
-    return redirect(url_for('specificMuseum', museum_name=museumname, isCurator=isCurator))
+        error = "Exhibit successfully added!"
+    except Exception as e:
+        print(e)
+        query = "rollback;"
+        cursor.execute(query)
+        error = 'There was an error adding the exhibit.'
+        return redirect(url_for('specificMuseum', museum_name=museumname, isCurator=isCurator, error=error))
+
+    return redirect(url_for('specificMuseum', museum_name=museumname, isCurator=isCurator, error=error))
 
 @app.route('/reviewMuseum/<museum_name>')
 def reviewMuseum(museum_name):
@@ -442,13 +450,30 @@ def newReview(museum_name):
     comment = request.form.get('description')
     rating = request.form.get('rating')
 
+    # ONLY IF YOU HAVE PURCHASED A TICKET
+    # IF USEREMAIL EXISTS IN TICKET TABLE FOR THIS MUSEUM
+    # THEN DO THE THING
+
+    purchasedTicket = "SELECT * FROM ticket WHERE visitorEmail='{0}' AND museumName='{1}';".format(visitor_email, museum_name)
+
     query = "INSERT INTO museumdb.review (museumName, visitorEmail, comment, rating) VALUES "
     query += "('{0}', '{1}', '{2}', {3});".format(museum_name, visitor_email, comment, rating)
 
     try:
-        cursor.execute(query)
-        conn.commit()
-        error="Review successfully recorded."
+        cursor.execute(purchasedTicket)
+        ticket = cursor.fetchone()
+        print(ticket)
+        if ticket is not None:
+            # you've already bought a ticket
+            # can review
+                cursor.execute(query)
+                conn.commit()
+                error="Review successfully recorded."
+        else:
+            # you havent bought a ticket
+            # you cannot review
+            error="You must purchase a ticket to the museum to leave a review!"
+
     except Exception as e:
         print(e)
         query = "rollback;"
@@ -518,11 +543,24 @@ def viewReviews(museum_name):
 
 @app.route('/removeExhibit/<museum_name>/<exhibit_name>', methods=['POST'])
 def removeExhibit(museum_name, exhibit_name):
+    error = request.args.get('error')
+
     delete_query = "DELETE FROM exhibit WHERE exhibitName = '{0}' AND museumName = '{1}';".format(exhibit_name, museum_name)
-    cursor.execute(delete_query)
-    conn.commit()
     isCurator = True
-    return redirect(url_for('specificMuseum', museum_name=museum_name, isCurator=isCurator))
+
+    try:
+        cursor.execute(delete_query)
+        conn.commit()
+        error="Exhibit successfully removed!"
+
+    except Exception as e:
+        print(e)
+        query = "rollback;"
+        cursor.execute(query)
+        error = 'There was an error removing the exhibit.'
+        return redirect(url_for('account.html', email=email, isCurator=isCurator, error=error))
+
+    return redirect(url_for('specificMuseum', museum_name=museum_name, isCurator=isCurator, error=error))
 
 @app.route('/purchasedTicket/<museum_name>', methods=['POST'])
 def purchaseTicket(museum_name):
