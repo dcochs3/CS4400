@@ -24,37 +24,67 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="add-container offset-2 col-8">
-                    <h3>Curator Request</h3>
+                    <h3>{{error}}</h3>
                     {% if error %}
                         <p class="error" style="color:red;"><strong>*</strong> {{ error }}
                     {% endif %}
 
-                    <form method=POST action='/postcuratorRequest'>
+                    <form action='/postCuratorRequest'>
+
                         <div class="form-group">
                             <div class="row">
-                                <div class="col-md-6">
-                                    <input type="curatormuseumname" name="curatormuseumname" class="form-control" id="input-cur-mus-name" placeholder="Which museum would you like to be a curator for?">
+                                <div class="col-md-5">
+                                    {% if no_museums %}
+                                        <input type="museumname" name="museumname" class="form-control" id="del-mus-name" placeholder="No museums currently exist!" disabled="disabled">
+                                    {% else %}
+                                        <input type="museumname" name="museumname" class="form-control" id="del-mus-name" placeholder="Type the Museum Name" >
+                                    {% endif %}
                                 </div>
+
                                 OR
-                                <div class="col-md-4">
 
-                                <!-- INSERT DROP DOWN MENU OF MUSEUMS HERE -->
-                                
+                                {% if no_museums %}
 
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <button class="btn" type="submit" name="curator-request-button" id="curator-request-button" value="Request">Submit Request</button>
-                            </div>
-                        </div>
-                    </form>
+                                    <div class="col-md-5">
+                                        <div class="dropdown">
+                                              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled="disabled">
+                                                Select Museum
+                                              </button>
+                                        </div>
+                                    </div>
 
-                    <form action='/back'>
-                        <div class="form-group">
-                            <div style="text-align:left;">
+                                {% else %}
+                                    <div class="col-md-5">
+                                        <div class="dropdown">
+                                              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Select Museum
+                                              </button>
+                                              <!-- LIST OF MUSEUMS -->
+                                              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                {% for museum in museum_list %}
 
-                                <!--Go back to search-->
-                                <button type="cancel" name="all-museums-button" class="btn" id="all-museums-button" value="Back">Back to Home</button>
+                                                    <a class="dropdown-item" href="/postCuratorRequest/{{museum|first}}/{{email}}">{{museum|first}}</a>
+                                                {% endfor %}
+                                              </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+                                {% if no_museums %}
+                                    <div class="col-md-1">
+                                        <span class="form-group">
+                                            <button class="btn" type="submit" name="delete-museum-button" id="delete-museum-button" value="Delete" disabled="disabled">Delete</button>
+                                        </span>
+                                    </div>
+                                {% else %}
+
+                                    <div class="col-md-1">
+                                        <span class="form-group">
+                                            <button class="btn" type="submit" name="curator-request-button" id="delete-museum-button" value="Delete">Send Request</button>
+                                        </span>
+                                    </div>
+                                {% endif %}
+
                             </div>
                         </div>
                     </form>
