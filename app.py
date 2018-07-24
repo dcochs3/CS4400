@@ -370,13 +370,14 @@ def getMuseumName():
     else:
         return redirect(url_for('specificMuseum', museum_name=museum_name, isCurator=isCurator))
 
-@app.route('/museum/<museum_name>/<isCurator>', methods=['POST', "GET"])
-def specificMuseum(museum_name, isCurator):
+@app.route('/museum/<museum_name>', methods=['POST', "GET"])
+def specificMuseum(museum_name):
     museumname = museum_name
     museum_info = None
     museum_exists = None
     visitor_email = session.get('user')
     purchasedTicket = None
+    isCurator=1
 
     query1 = "SELECT * FROM museumdb.museum WHERE museumName = '{0}';".format(museumname)
     query = "SELECT exhibitName, year, url FROM museumdb.exhibit WHERE museumName = '{0}';".format(museumname)
@@ -403,7 +404,6 @@ def specificMuseum(museum_name, isCurator):
         # that museum entered does not exist in the database
         error = "There is no museum with that name."
         return redirect(url_for('loggedin', error=error))
-    print(type(isCurator))
     return render_template('specificMuseum.html', museum_name=museumname, isCurator=isCurator, museum_info=museum_info, purchasedTicket=purchasedTicket)
 
 @app.route('/addExhibit/<museum_name>', methods=['POST'])       
@@ -424,39 +424,88 @@ def addExhibit(museum_name):
         print(str(e))
     return redirect(url_for('specificMuseum', museum_name=museumname, isCurator=isCurator))
 
-@app.route('/checkReviews/<museum_name>', methods=['GET'])
-def checkReviews(museum_name):
-    print("Got to Check Reviews")
-    redirect(url_for("addReview", museum_name=museum_name, old_comment="", old_rating=-1))
-
-@app.route('/addReview/<museum_name>/<comment>/<rating>', methods=['POST'])
-def addReview(museum_name, old_comment, old_rating):
-
-    comment = request.form['description']
-    rating = request.form['rating']
+@app.route('/reviewMuseum/<museum_name>')
+def reviewMuseum(museum_name):
+    museum_name=museum_name
+    error = request.args.get('error')
     visitor_email = session.get('user')
-    isCurator = None
-    bought_ticket_query = "SELECT * FROM ticket WHERE museumName = '{0}' AND visitorEmail = '{1}'".format(museum_name, visitor_email)
-    cursor.execute(bought_ticket_query)
-    ticket = cursor.fetchall()
-    bought_ticket = len(ticket) > 0
-    if bought_ticket:
-        select_review_query = "SELECT * FROM review WHERE museumName = '{0}' AND visitorEmail = '{1}';".format(museum_name, visitor_email)
-        cursor.execute(select_query)
-        review = cursor.fetchall()
-        if len(review) > 0:
-            print("already a review")
-            #redirect(url_for())
+
+    review_info = None
+    museumReviewed = None
+
+    reviewMuseumQuery = "SELECT * FROM review WHERE visitorEmail = '{0}' AND museumName = '{1}';".format(visitor_email, museum_name)
+
+    try:
+        cursor.execute(reviewMuseumQuery)
+        review_info = cursor.fetchone()
+
+        if len(review_info) == 0:
+            museumReviewed = 0
         else:
-            query = "INSERT INTO museumDB.review VALUES ('{0}', '{1}', '{2}', {3});".format(museum_name, visitor_email, comment, rating)
-            cursor.execute(query)
-            conn.commit()
+            museumReviewed = 1
 
-    else:
-        print("buy a ticket pls")
-        #Tell the user they have to buy a ticket
+    except:
+        print('Error')
 
-    return redirect(url_for('specificMuseum', museum_name=museum_name, isCurator=isCurator)) 
+    print(review_info)
+    return render_template('writeReview.html', error=error, museum_name=museum_name, museumReviewed=museumReviewed, review_info=review_info)
+
+# @app.route('/editMuseum/<museum_name>', methods=['POST'])
+# def editMuseum(museum_name):
+#     museum_name=museum_name
+#     isCurator=1
+
+#     print("edit review")
+#     return render_template('specificMuseum.html', museum_name=museum_name, isCurator=isCurator)
+
+@app.route('/newReview/<museum_name>', methods=['POST'])
+def newReview(museum_name):
+    museum_name=museum_name
+    error = request.args.get('error')
+    visitor_email = session.get('user')
+    comment = request.form.get('description')
+    rating = request.form.get('rating')
+
+    query = "INSERT INTO museumdb.review (museumName, visitorEmail, comment, rating) VALUES "
+    query += "('{0}', '{1}', '{2}', {3});".format(museum_name, visitor_email, comment, rating)
+
+    try:
+        cursor.execute(query)
+        conn.commit()
+        error="Review successfully recorded."
+    except Exception as e:
+        print(e)
+        query = "rollback;"
+        cursor.execute(query)
+        error = 'There was an error reviewing museum.'
+
+    return redirect(url_for('specificMuseum', museum_name=museum_name, isCurator=0, error=error))
+
+
+@app.route('/editReview/<museum_name>', methods=['POST'])
+def editMuseum(museum_name):
+    museum_name = museum_name
+    visitor_email = session.get('user')
+    error = request.args.get('error')
+    comment = request.form.get('description')
+    rating = request.form.get('rating')
+
+    print(comment)
+    print(rating)
+    updateQuery = "UPDATE museumdb.review SET comment='{0}', rating={1} WHERE visitorEmail='{2}' AND museumName='{3}';".format(comment, rating, visitor_email, museum_name)
+    print(updateQuery)
+
+    try:
+        cursor.execute(updateQuery)
+        conn.commit()
+        error="Review successfully updated."
+    except Exception as e:
+        print(e)
+        query = "rollback;"
+        cursor.execute(query)
+        error = 'There was an error updating your review.'
+
+    return redirect(url_for('specificMuseum', museum_name=museum_name, isCurator=0, error=error))
 
 @app.route('/viewReviews/<museum_name>', methods=['POST'])
 def viewReviews(museum_name):
