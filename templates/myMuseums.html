@@ -1,9 +1,7 @@
-<!-- ADMIN -->
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Review Curator Requests - Barcelona Museums Ticketing & Review System</title>
+        <title>My Museums - Barcelona Museums Ticketing & Review System</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <!-- jQuery -->
@@ -25,7 +23,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="add-container offset-1 col-10 offset-md-2 col-md-8">
-                    <h3>Review Curator Requests</h3>
+                    <h3>My Museums</h3>
                     {% if error %}
                         <p class="error" style="color:red;"><strong>*</strong> {{ error }}
                     {% endif %}
@@ -34,49 +32,40 @@
                         <table class="table table-bordered table-hover">
                             <thead>
                                 <tr>
-                                    <th>Visitor</th>
                                     <th>Museum</th>
-                                    <th>Approve</th>
-                                    <th>Deny</th>
+                                    <th>Exhibit Count</th>
+                                    <th>Average Rating</th>
                                 </tr>
                             </thead>
-
                             <tbody>
-                                <!-- for each curator request -->
-                                {% for request in curator_requests %}
+                                <!-- for each museum -->
+                                {% for museum in museum_list %}
+
                                 <tr>
-                                    <td>{{request[1]}}</td>
-
                                     <td>
-                                        <a href="/museum/{{request[0]}}">{{request[0]}}</a>
+                                        <a href="/museum/{{museum|first}}">{{museum|first}}</a>
                                     </td>
-
                                     <td>
-                                        <form method=POST action='/approveRequest/{{request[1]}}'>
-                                            <div style="text-align:center;">
-                                                <button type="submit" name="approve-request-button" class="btn" id="approve-request-button" value="{{request[0]}}">Approve</button>
-                                            </div>
-                                        </form>
+                                        {% for exhibit in exhibitCounts if exhibit|first == museum|first %}
+                                                {{exhibit[1]}}
+                                            {% else %}
+                                                0
+                                        {% endfor %}
                                     </td>
-
                                     <td>
-                                        <form method=POST action='/denyRequest/{{request[1]}}'>
-                                            <div style="text-align:center;">
-                                                <button type="submit" name="deny-request-button" class="btn" id="deny-request-button" value="{{request[0]}}">Deny</button>
-                                            </div>
-                                        </form>
+                                        {% for rating in averageRatings if rating|first == museum|first %}
+                                                {{ rating[1] }} / 5
+                                            {% else %}
+                                                -- / 5
+                                        {% endfor %}
                                     </td>
-
                                 </tr>
-
                                 {% endfor %}
                             </tbody>
-
-
                         </table>
                     </div>
 
-<!--                     <form action='/adminHome'
+<!--                     <form action='/back'>
                         <div class="form-group">
                             <div style="text-align:left;">
 

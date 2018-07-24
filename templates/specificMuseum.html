@@ -59,7 +59,7 @@
                                     {% if isCurator %}
                                         <td>
                                             <!-- TODO action -->
-                                            <form action='/removeExhibit'>
+                                            <form method=POST action='/removeExhibit/{{museum_name}}/{{exhibit[0]}}'>
                                                 <div style="text-align:center;">
                                                     <button type="submit" name="remove-exhibit-button" class="btn" id="remove-exhibit-button" value="Remove">Remove</button>
                                                 </div>
@@ -82,12 +82,15 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <div style="text-align:center;">
-                            <!-- Leave a Review BUTTON -->
-                            <button type="button" name="leave-review-button" class="btn" id="leave-review-button" value="Review" data-toggle="modal" data-target="#leave-review-modal">Review Museum</button>
+                    <form method=GET action='/reviewMuseum/{{museum_name}}'>
+                        <div class="form-group">
+                            <div style="text-align:center;">
+                                <!-- Leave a Review BUTTON -->
+                                <button type="submit" name="leave-review-button" class="btn" id="leave-review-button" value="Review">Review Museum</button>
+
+                            </div>
                         </div>
-                    </div>
+                    </form>
 
                     <form method=POST action='/viewReviews/{{museum_name}}'>
                         <div class="form-group">
@@ -98,12 +101,14 @@
 
                     <!-- TODO -->
                     <!-- if isCurator -->
-                    <div class="form-group">
-                        <div style="text-align:center;">
-                            <!-- Add Exhibit BUTTON -->
-                            <button type="button" name="add-exhibit-button" class="btn" id="add-exhibit-button" value="Add" data-toggle="modal" data-target="#add-exhibit-modal">Add Exhibit</button>
+                    {% if isCurator %}
+                        <div class="form-group">
+                            <div style="text-align:center;">
+                                <!-- Add Exhibit BUTTON -->
+                                <button type="button" name="add-exhibit-button" class="btn" id="add-exhibit-button" value="Add" data-toggle="modal" data-target="#add-exhibit-modal">Add Exhibit</button>
+                            </div>
                         </div>
-                    </div>
+                    {% endif %}
 
 
                     <!-- Purchase Ticket pop-up -->
@@ -111,27 +116,107 @@
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title">Ticket Confirmation</h5>
+
+                                    {% if purchasedTicket %}
+                                        <h5 class="modal-title">Ticket Already Purchased</h5>
+                                    {% else %}
+                                        <h5 class="modal-title">Ticket Confirmation</h5>
+                                    {% endif %}
+
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
 
-                                <form method=POST action="/purchasedTicket">
+                                <form method=POST action="/purchasedTicket/{{museum_name}}">
                                     <div class="modal-body">
                                         <div class="form-group">
                                             <p class="error-message"></p>
-                                            Thank you for purchasing a ticket to {{museum_name}}.
-                                            </br>
-                                            Check your email for the ticket!
+
+                                            {% if purchasedTicket %}
+                                                You have already purchased a ticket to this museum!
+                                            {% else %}
+                                                Thank you for purchasing a ticket to {{museum_name}}.
+                                                </br>
+                                                In order to complete your purchase, press submit!
+                                                </br>
+                                                To cancel, press the x in the top right corner.
+
+                                                <div class="modal-footer">
+                                                    <button class="btn btn-primary" name="submit-museum-button" id="submit-museum-button" type="submit">Submit</button>
+                                                </div>
+
+                                            {% endif %}
                                         </div>
+                                    </div>
+
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- EDIT review pop up -->
+                    {% if museumReviewed %}
+                    <div class="modal fade" id="leave-review-modal" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Edit your Review</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+
+                                <form method=POST action='/editReview/{{museum_name}}'>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <p class="error-message"></p>
+
+                                            <!-- RATING -->
+                                            <div style="text-align:left;">
+                                                <div class = "column-one">
+                                                    <div class="label">
+                                                            Rating:
+                                                    </div>
+                                                </div>
+                                                <div class="column-two">
+                                                    <fieldset class="rating">
+
+                                                        <input type="radio" id="star5" name="rating" value="5" />
+                                                            <label class = "full" for="star5" title="5 stars"></label>
+
+                                                       <input type="radio" id="star4" name="rating" value="4" />
+                                                            <label class = "full" for="star4" title="4 stars"></label>
+
+                                                        <input type="radio" id="star3" name="rating" value="3" />
+                                                            <label class = "full" for="star3" title="3 stars"></label>
+
+                                                        <input type="radio" id="star2" name="rating" value="2" />
+                                                            <label class = "full" for="star2" title="2 stars"></label>
+
+                                                        <input type="radio" id="star1" name="rating" value="1" />
+                                                            <label class = "full" for="star1" title="1 star"></label>
+
+                                                    </fieldset>
+                                                </div>
+                                            </div>
+                                            </br>
+                                            <textarea name="description" class="form-control" id="input-description" placeholder="Comment">{{review_info[2]}}</textarea>
+
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                        <button class="btn btn-primary" name="submit-review-button" id="submit-review-button" type="submit">Update Review</button>
                                     </div>
                                 </form>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Write review pop-up -->
+                    {% else %}
+
                     <div class="modal fade" id="leave-review-modal" tabindex="-1" role="dialog" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
@@ -142,7 +227,7 @@
                                     </button>
                                 </div>
 
-                                <form method=POST action='/museum/{{museum_name}}'>
+                                <form method=POST action='/addReview/{{museum_name}}'>
                                     <div class="modal-body">
                                         <div class="form-group">
                                             <p class="error-message"></p>
@@ -182,6 +267,8 @@
                             </div>
                         </div>
                     </div>
+
+                    {% endif %}
 
 
                     <!-- Add exhibit pop-up -->
@@ -229,12 +316,12 @@
 
 
 
-                    <form action='/back'>
+<!--                     <form action='/back'>
                         <div style="text-align:left;">
-                            <!--Go back to search-->
                             <button type="cancel" name="all-museums-button" class="btn" id="all-museums-button" value="Back">Back to Home</button>
                         </div>
-                    </form>
+                    </form> -->
+
                 </div>
             </div>
         </div>

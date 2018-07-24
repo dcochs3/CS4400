@@ -75,10 +75,13 @@
 #approve-request-button,
 #deny-request-button,
 #review-requests-button,
+#delete-museum-button,
 #add-museum-button,
 #delete-museum-button,
 #submit-museum-button,
-#submit-exhibit-button {
+#submit-exhibit-button,
+#submit-review-button,
+#cancel-button {
     font-size: 16px;
     background-color: #0275d8;
     color: white;}
@@ -96,13 +99,16 @@
 #deny-request-button:hover,
 #purchase-ticket-button:hover,
 #leave-review-button:hover,
+#delete-museum-button:hover,
 #view-reviews-button:hover,
 #add-exhibit-button:hover,
 #review-requests-button:hover,
 #add-museum-button:hover,
 #delete-museum-button:hover,
 #submit-exhibit-button:hover,
-#submit-museum-button:hover {
+#submit-museum-button:hover,
+#submit-review-button:hover,
+#cancel-button:hover {
     background-color: #FDDA24;
     cursor: pointer;
 

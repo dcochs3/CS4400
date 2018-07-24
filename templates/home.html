@@ -148,7 +148,6 @@
                         </form>
 
                         <!-- Add museum pop-up -->
-                        <!-- TODO -->
                         <div class="modal fade" id="add-museum-modal" tabindex="-1" role="dialog" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
@@ -159,15 +158,14 @@
                                         </button>
                                     </div>
 
-                                    <!-- TO DO: ACTION -->
-                                    <form method=POST action='/home'>
+                                    <form method=POST action='/addMuseum'>
                                         <div class="modal-body">
                                             <div class="form-group">
                                                 <p class="error-message"></p>
 
                                                 <!--Museum NAME INPUT-->
                                                 <div class="form-group">
-                                                    <input type="text" name="museumname" class="form-control" id="input-museumname" placeholder="Museum Name" required>
+                                                    <input type="text" name="input-museumname" class="form-control" id="input-museumname" placeholder="Museum Name" required>
                                                 </div>
                                             </div>
                                         </div>

@@ -27,20 +27,37 @@
                     {% if error %}
                         <p class="error" style="color:red;"><strong>*</strong> {{ error }}
                     {% endif %}
+                     <div class="container">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Museum Name</th>
+                                    <th>Price ($)</th>
+                                    <th>Time of Purchase</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- for each ticket -->
+                                {% for ticket in tickets %}
+                                <tr>
+                                    <td>{{ticket[0]}}</td>
+                                    <td>${{ticket[2]}}</td>
+                                    <td>{{ticket[3]}}</td>                                    
+                                </tr>
 
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
 
-
-
-
-                    <form action='/back'>
+<!--                     <form action='/back'>
                         <div class="form-group">
                             <div style="text-align:left;">
 
-                                <!--Go back to search-->
                                 <button type="cancel" name="all-museums-button" class="btn" id="all-museums-button" value="Back">Back to Home</button>
                             </div>
                         </div>
-                    </form>
+                    </form> -->
 
                 </div>
             </div>

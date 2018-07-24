@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Write Review - Barcelona Museums Ticketing & Review System</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+        <!-- Tether -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+        <!-- Our CSS -->
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/museumStyle.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/modalStyle.css') }}">
+        <!-- Production Folder functions -->
+        <script src="{{ url_for('static',filename='museums.js') }}"></script>
+    </head>
+    <body>
+
+        {% if museumReviewed %}
+
+        <!-- EDIT REIVEW -->
+        <!--NAV BAR-->
+        {% include 'navbar.html' %}
+        <div class="container-fluid">
+            <div class="row">
+                <div class="add-container offset-1 col-10 offset-md-2 col-md-8">
+                    <h3>Edit your Review</h3>
+                    {% if error %}
+                        <p class="error" style="color:red;"><strong>*</strong> {{ error }}
+                    {% endif %}
+
+
+                    <div class="container">
+                        <form method=POST action='/editReview/{{museum_name}}'>
+
+                        <div class="form-group">
+
+                        <!-- RATING -->
+                        <div style="text-align:left;">
+                            <div class = "column-one">
+                                <div class="label">
+                                        Rating:
+                                </div>
+                            </div>
+                            <div class="column-two">
+                                <!-- INSERT RADIO BUTTON -->
+                                    {% if review_info[3] == 1 %}
+                                    <div class="custom-control-inline">
+                                        <input type="radio" name="rating" value="1" checked> 1
+                                    </div>
+                                    {% else %}
+                                    <div class="custom-control-inline">
+                                        <input type="radio" name="rating" value="1"> 1
+                                    </div>
+                                    {% endif %}
+
+                                    {% if review_info[3] == 2 %}
+                                    <div class="custom-control-inline">
+                                        <input type="radio" name="rating" value="2" checked> 2
+                                    </div>
+                                    {% else %}
+                                    <div class="custom-control-inline">
+                                        <input type="radio" name="rating" value="2"> 2
+                                    </div>
+                                    {% endif %}
+
+                                    {% if review_info[3] == 3 %}
+                                    <div class="custom-control-inline">
+                                        <input type="radio" name="rating" value="3" checked> 3
+                                    </div>
+                                    {% else %}
+                                    <div class="custom-control-inline">
+                                        <input type="radio" name="rating" value="3"> 3
+                                    </div>
+                                    {% endif %}
+
+
+                                    {% if review_info[3] == 4 %}
+                                    <div class="custom-control-inline">
+                                        <input type="radio" name="rating" value="4" checked> 4
+                                    </div>
+                                    {% else %}
+                                    <div class="custom-control-inline">
+                                        <input type="radio" name="rating" value="4"> 4
+                                    </div>
+                                    {% endif %}
+
+                                    {% if review_info[3] == 5 %}
+                                    <div class="custom-control-inline">
+                                        <input type="radio" name="rating" value="5" checked> 5
+                                    </div>
+                                    {% else %}
+                                    <div class="custom-control-inline">
+                                        <input type="radio" name="rating" value="5"> 5
+                                    </div>
+                                    {% endif %}
+
+
+                            </div>
+                        </div>
+                        </br>
+                        <textarea name="description" class="form-control" id="input-description" placeholder="Comment">{{review_info[2]}}</textarea>
+                    </div>
+
+                        <div class="form-group">
+                            <div style="text-align:center;">
+
+                                <!--Go ro edit review-->
+                                <button type="submit" name="submit-review-button" class="btn" id="submit-review-button" value="Update">Update Review</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <form method=POST action='/deleteReview/{{museum_name}}'>
+                        <div class="form-group">
+                            <div style="text-align:center;">
+
+                                <!--Go back to specific museum page-->
+                                <button type="submit" name="all-museums-button" class="btn" id="all-museums-button" value="Delete">Delete Review</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {% else %}
+
+        <!--NAV BAR-->
+        {% include 'navbar.html' %}
+        <div class="container-fluid">
+            <div class="row">
+                <div class="add-container offset-1 col-10 offset-md-2 col-md-8">
+                    <h3>Write a Review</h3>
+                    {% if error %}
+                        <p class="error" style="color:red;"><strong>*</strong> {{ error }}
+                    {% endif %}
+
+
+                    <div class="container">
+                        <form method=POST action='/newReview/{{museum_name}}'>
+
+                                <div class="form-group">
+                                    <p class="error-message"></p>
+
+                                    <!-- RATING -->
+                                    <div style="text-align:left;">
+                                        <div class = "column-one">
+                                            <div class="label">
+                                                    Rating:
+                                            </div>
+                                        </div>
+                                        <div class="column-two">
+                                            <!-- INSERT RADIO BUTTON -->
+                                                <div class="custom-control-inline">
+                                                    <input type="radio" name="rating" value="1"> 1
+                                                </div>
+                                                
+                                                <div class="custom-control-inline">
+                                                    <input type="radio" name="rating" value="2"> 2
+                                                </div>
+                                                
+                                                <div class="custom-control-inline">
+                                                    <input type="radio" name="rating" value="3"> 3
+                                                </div>
+
+                                                <div class="custom-control-inline">
+                                                    <input type="radio" name="rating" value="4"> 4
+                                                </div>
+
+                                                <div class="custom-control-inline">
+                                                    <input type="radio" name="rating" value="5"> 5
+                                                </div>
+                                            
+                                        </div>
+                                    </div>
+                                    </br>
+                                    <textarea name="description" class="form-control" id="input-description" placeholder="Comment"></textarea>
+                            </div>
+
+
+                            <!--Submit review BUTTON-->
+                            <button type="submit" name="submit-review-button" class="btn" id="submit-review-button" value="Submit">Submit Review</button>
+
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

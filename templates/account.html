@@ -31,7 +31,7 @@
                         <p class="error" style="color:red;"><strong>*</strong> {{ error }}
                     {% endif %}
 
-                    <form action='/myTickets'>
+                    <form method=GET action='/myTickets'>
                         <div class="form-group">
                             <!-- View all Reviews BUTTON -->
                             <button type="submit" name="my-tickets-button" class="btn" id="my-tickets-button" value="Tickets">My Tickets</button>
@@ -45,21 +45,22 @@
                         </div>
                     </form>
 
-                    <form action='/curatorRequest'>
+                    <form action='/curatorRequest/{{email}}/Welcome'>
                         <div class="form-group">
                             <!-- View all Reviews BUTTON -->
                             <button type="submit" name="request-button" class="btn" id="request-button" value="Request">Curator Request</button>
                         </div>
                     </form>
 
-                    <!-- TODO -->
                     <!-- if curator -->
-                    <form action='/myMuseums'>
-                        <div class="form-group">
-                            <!-- View all Reviews BUTTON -->
-                            <button type="submit" name="my-museums-button" class="btn" id="my-museums-button" value="Museums">My Museums</button>
-                        </div>
-                    </form>
+                    {% if isCurator %}
+                        <form action='/myMuseums'>
+                            <div class="form-group">
+                                <!-- View all Reviews BUTTON -->
+                                <button type="submit" name="my-museums-button" class="btn" id="my-museums-button" value="Museums">My Museums</button>
+                            </div>
+                        </form>
+                    {% endif %}
 
                     <form action='/logout'>
                         <div class="form-group">
@@ -67,7 +68,6 @@
                             <button type="submit" name="logout-button" class="btn" id="logout-button" value="Logout">Logout</button>
                         </div>
                     </form>
-
                     <div style="text-align:center;">
                         <!-- Delete my account -->
                         <button type="button" name="delete-account-button" class="btn" id="delete-account-button" value="Delete" data-toggle="modal" data-target="#delete-account-modal">Delete my Account</button>
@@ -96,12 +96,11 @@
                         </div>
                     </div>
 
-                    <form action='/back'>
+<!--                     <form action='/back'>
                         <div style="text-align:left;">
-                            <!--Go back to search-->
                             <button type="cancel" name="all-museums-button" class="btn" id="all-museums-button" value="Back">Back to Home</button>
                         </div>
-                    </form>
+                    </form> -->
                 </div>
             </div>
         </div>
