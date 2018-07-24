@@ -13,18 +13,18 @@ VALUES ('Picasso Museum', 'sweat@gatech.edu'),
        ('Museum of Illusions', NULL);
               
 INSERT INTO museumDB.exhibit
-VALUES ('Picasso Museum', 'bird', 1983, NULL, 'sweat@gatech.edu')
-('Picasso Museum', 'plane', 1990, NULL, 'sweat@gatech.edu')
-('Picasso Museum', 'superman', 1995, NULL, 'sweat@gatech.edu')
+VALUES ('Picasso Museum', 'bird', 1983, NULL, 'sweat@gatech.edu'),
+('Picasso Museum', 'plane', 1990, NULL, 'sweat@gatech.edu'),
+('Picasso Museum', 'superman', 1995, NULL, 'sweat@gatech.edu'),
 ('MACBA', 'crying college student', 1995, NULL, 'alex@gatech.edu');
 
 INSERT INTO museumDB.ticket
-VALUES ('chall@gatech.edu', 'MACBA', 5, 2018-05-20)
-('chall@gatech.edu', 'Picasso Museum', 20, 2018-06-01)
-('dochs3@gatech.edu', 'Picasso Museum', 10, 2018-06-10);
+VALUES ('chall@gatech.edu', 'MACBA', 5, '2018-05-20'),
+('chall@gatech.edu', 'Picasso Museum', 20, '2018-06-01'),
+('dochs3@gatech.edu', 'Picasso Museum', 10, '2018-06-10');
 
 INSERT INTO museumDB.review
-VALUES ('Picasso Museum', 'alex@gatech.edu', 'Decent', 4)
+VALUES ('Picasso Museum', 'alex@gatech.edu', 'Decent', 4),
 ('Museum of Illusions', 'chall@gatech.edu', 'Wild!', 5);
 
 INSERT INTO museumDB.curator_request
