@@ -19,9 +19,9 @@ VALUES ('Picasso Museum', 'bird', 1983, NULL, 'sweat@gatech.edu'),
 ('MACBA', 'crying college student', 1995, NULL, 'alex@gatech.edu');
 
 INSERT INTO museumDB.ticket
-VALUES ('chall@gatech.edu', 'MACBA', 5, '2018-05-20'),
-('chall@gatech.edu', 'Picasso Museum', 20, '2018-06-01'),
-('dochs3@gatech.edu', 'Picasso Museum', 10, '2018-06-10');
+VALUES ('MACBA', 'chall@gatech.edu', 5, '2018-05-20'),
+('Picasso Museum', 'chall@gatech.edu', 20, '2018-06-01'),
+('Picasso Museum', 'dochs3@gatech.edu', 10, '2018-06-10');
 
 INSERT INTO museumDB.review
 VALUES ('Picasso Museum', 'alex@gatech.edu', 'Decent', 4),
