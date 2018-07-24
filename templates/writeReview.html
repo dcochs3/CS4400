@@ -123,35 +123,11 @@
                             </div>
                         </div>
                     </form>
-
-
-                    <form method=POST action='/specificMuseum/{{museum_name}}'>
-                        <div class="form-group">
-                            <div style="text-align:center;">
-
-                                <!--Go back to specific museum page-->
-                                <button type="submit" name="all-museums-button" class="btn" id="all-museums-button" value="Cancel">Cancel</button>
-                            </div>
-                        </div>
-                    </form>
-
-                    <form action='/back'>
-                        <div class="form-group">
-                            <div style="text-align:left;">
-
-                                <!--Go back to search-->
-                                <button type="cancel" name="all-museums-button" class="btn" id="all-museums-button" value="Back">Back to Home</button>
-                            </div>
-                        </div>
-                    </form>
-
                 </div>
             </div>
         </div>
 
         {% else %}
-
-<!-- TODODODODODODODODOD -->
 
         <!--NAV BAR-->
         {% include 'navbar.html' %}
@@ -211,38 +187,9 @@
 
 
                         </form>
-                        <!-- Cancel button -->
-                        <form action='/specificMuseum/{{museum_name}}'>
-                            <div class="form-group">
-                                <!--cancel BUTTON-->
-                                <button type="submit" name="all-museums-button" class="btn" id="all-museums-button" value="Add">Cancel</button>
-                            </div>
-                        </form>
                     </div>
-
-
-
-
-                    <form action='/back'>
-                        <div class="form-group">
-                            <div style="text-align:left;">
-
-                                <!--Go back to search-->
-                                <button type="cancel" name="all-museums-button" class="btn" id="all-museums-button" value="Back">Back to Home</button>
-                            </div>
-                        </div>
-                    </form>
-
                 </div>
             </div>
         </div>
-
-
-        {% endif %}
-
-
-
-
-
     </body>
 </html>
