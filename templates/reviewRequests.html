@@ -54,7 +54,7 @@
                                     <td>
                                         <form method=POST action='/approveRequest/{{request[1]}}'>
                                             <div style="text-align:center;">
-                                                <button type="submit" name="approve-request-button" class="btn" id="approve-request-button" value="Approve">Approve</button>
+                                                <button type="submit" name="approve-request-button" class="btn" id="approve-request-button" value="{{request[0]}}">Approve</button>
                                             </div>
                                         </form>
                                     </td>
@@ -62,7 +62,7 @@
                                     <td>
                                         <form method=POST action='/denyRequest/{{request[1]}}'>
                                             <div style="text-align:center;">
-                                                <button type="submit" name="deny-request-button" class="btn" id="deny-request-button" value="Deny">Deny</button>
+                                                <button type="submit" name="deny-request-button" class="btn" id="deny-request-button" value="{{request[0]}}">Deny</button>
                                             </div>
                                         </form>
                                     </td>

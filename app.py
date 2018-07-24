@@ -688,23 +688,42 @@ def adminHome():
 @app.route('/approveRequest/<email>', methods=['POST'])
 def approveRequest(email):
     email = email
+    museum_name = request.form['approve-request-button']
+
+    # check to see if a curator already exists for that museum
+    exists = "SELECT curatorEmail FROM museumdb.museum WHERE museumName='{0}';".format(museum_name)
 
     # update the visitor table
     updateQuery = "UPDATE museumdb.visitor SET isCurator=1 WHERE email='{0}';".format(email)
     # remove the request from the curator request table
-    deleteQuery = "DELETE FROM museumdb.curator_request WHERE visitorEmail='{0}';".format(email)
+    deleteQuery = "DELETE FROM museumdb.curator_request WHERE visitorEmail='{0}' AND museumName='{1}';".format(email, museum_name)
+
+    museumTable = "UPDATE museumdb.museum SET curatorEmail='{0}' WHERE museumName='{1}';".format(email, museum_name)
 
     query = "SELECT * FROM museumdb.curator_request;"
 
     try:
-        cursor.execute(updateQuery)
-        error = "Request successfully approved."
-        conn.commit()
-        cursor.execute(deleteQuery)
-        conn.commit()
+        cursor.execute(exists)
+        curators = cursor.fetchone()
+        print(curators)
+        if curators is not None:
+            cursor.execute(query)
+            curator_requests = cursor.fetchall()
 
-        cursor.execute(query)
-        curator_requests = cursor.fetchall()
+            error="A curator already exists for that museum!"
+        else:
+            cursor.execute(updateQuery)
+            conn.commit()
+            cursor.execute(museumTable)
+            conn.commit()
+
+            error = "Request successfully approved."
+
+            cursor.execute(deleteQuery)
+            conn.commit()
+
+            cursor.execute(query)
+            curator_requests = cursor.fetchall()
 
     except Exception as e:
         print(e.msg)
@@ -720,6 +739,8 @@ def approveRequest(email):
 @app.route('/denyRequest/<email>', methods=['POST'])
 def denyRequest(email):
     email=email
+    museum_name = request.form['deny-request-button']
+
 
     # there is no update to be done
     # remove the request from the curator request table
