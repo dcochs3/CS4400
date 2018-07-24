@@ -66,7 +66,7 @@ TABLES['museum'] = (
     "   `museumName` varchar(255) NOT NULL,"
     "   `curatorEmail` varchar(255),"
     "   PRIMARY KEY (`museumName`),"
-    "   FOREIGN KEY (`curatorEmail`) REFERENCES `visitor` (`email`) ON DELETE CASCADE"
+    "   FOREIGN KEY (`curatorEmail`) REFERENCES `visitor` (`email`) ON DELETE SET NULL"
     ")")
 
 TABLES['curator_request'] = (
@@ -86,7 +86,7 @@ TABLES['review'] = (
     "   `rating` tinyint NOT NULL,"
     "   PRIMARY KEY (`museumName`, `visitorEmail`),"
     "   FOREIGN KEY (`museumName`) REFERENCES `museum` (`museumName`),"
-    "   FOREIGN KEY (`visitorEmail`) REFERENCES `visitor` (`email`),"
+    "   FOREIGN KEY (`visitorEmail`) REFERENCES `visitor` (`email`) ON DELETE CASCADE,"
     "   CONSTRAINT CHK_Rating CHECK (Rating BETWEEN 1 AND 5)"
     ")")
 
@@ -98,7 +98,7 @@ TABLES['ticket'] = (
     "   `purchaseTimeStamp` datetime NOT NULL,"
     "   PRIMARY KEY (`museumName`, `visitorEmail`),"
     "   FOREIGN KEY (`museumName`) REFERENCES `museum` (`museumName`),"
-    "   FOREIGN KEY (`visitorEmail`) REFERENCES `visitor` (`email`)"
+    "   FOREIGN KEY (`visitorEmail`) REFERENCES `visitor` (`email`) ON DELETE CASCADE"
     ")")
 
 TABLES['exhibit'] = (
@@ -431,7 +431,7 @@ def reviewMuseum(museum_name):
 
     except:
         print('Error')
-        
+
     return render_template('writeReview.html', error=error, museum_name=museum_name, museumReviewed=museumReviewed, review_info=review_info)
 
 @app.route('/newReview/<museum_name>', methods=['POST'])
@@ -554,14 +554,17 @@ def manageAccount():
     try:
         cursor.execute(query1)
         isCurator = cursor.fetchone()
-        isCurator = isCurator[0]
+        if isCurator is not None:
+            isCurator = isCurator[0]
+        else:
+            isCurator = 0
 
     except Exception as e:
-        print(e.msg)
+        print(e)
         query = "rollback;"
         cursor.execute(query)
         error = 'Error.'
-        return redirect(url_for('welcome', error=error))
+        return redirect(url_for('account.html', email=email, isCurator=isCurator))
 
     return render_template('account.html', email=email, isCurator=isCurator)
 
