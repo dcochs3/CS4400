@@ -369,8 +369,9 @@ def specificMuseum(museum_name):
 
     query1 = "SELECT * FROM museumdb.museum WHERE museumName = '{0}';".format(museumname)
     query = "SELECT exhibitName, year, url FROM museumdb.exhibit WHERE museumName = '{0}';".format(museumname)
+    curator_query = "SELECT * FROM visitor WHERE email = '{0}' AND isCurator = 1".format(visitor_email)
     purchasedTicketQuery = "SELECT * FROM ticket WHERE visitorEmail = '{0}' AND museumName = '{1}';".format(visitor_email, museumname)
-
+    print(curator_query)
     try:
         cursor.execute(query1)
         museum_exists = cursor.fetchone()
@@ -384,7 +385,10 @@ def specificMuseum(museum_name):
             purchasedTicket = 0
         else:
             purchasedTicket = 1
-
+        cursor.execute(curator_query)
+        isCuratorList = cursor.fetchall()
+        isCurator = len(isCuratorList) > 0
+        print(isCuratorList)
     except:
         print('Error')
 
@@ -686,7 +690,7 @@ def approveRequest(email):
     email = email
 
     # update the visitor table
-    updateQuery = "UPDATE museumdb.visitors SET isCurator=1 WHERE email='{0}';".format(email)
+    updateQuery = "UPDATE museumdb.visitor SET isCurator=1 WHERE email='{0}';".format(email)
     # remove the request from the curator request table
     deleteQuery = "DELETE FROM museumdb.curator_request WHERE visitorEmail='{0}';".format(email)
 
@@ -719,7 +723,7 @@ def denyRequest(email):
 
     # there is no update to be done
     # remove the request from the curator request table
-    deleteQuery = "DELETE FROM museumdb.curator_request WHERE visitorEmail='{0}';".format(email)
+    deleteQuery = "DELETE FROM museumdb.curator_request WHERE visitorEmail='{0}' AND museumName = '{1}';".format(email, museum_name)
 
     query = "SELECT * FROM museumdb.curator_request;"
 
