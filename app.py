@@ -74,8 +74,8 @@ TABLES['curator_request'] = (
     "   `museumName` varchar(255) NOT NULL,"
     "   `visitorEmail` varchar(255) NOT NULL,"
     "   PRIMARY KEY (`museumName`, `visitorEmail`),"
-    "   FOREIGN KEY (`museumName`) REFERENCES `museum` (`museumName`),"
-    "   FOREIGN KEY (`visitorEmail`) REFERENCES `visitor` (`email`)"
+    "   FOREIGN KEY (`museumName`) REFERENCES `museum` (`museumName`) ON DELETE CASCADE,"
+    "   FOREIGN KEY (`visitorEmail`) REFERENCES `visitor` (`email`) ON DELETE CASCADE"
     ")")
 
 TABLES['review'] = (
@@ -85,7 +85,7 @@ TABLES['review'] = (
     "   `comment` varchar(4096),"
     "   `rating` tinyint NOT NULL,"
     "   PRIMARY KEY (`museumName`, `visitorEmail`),"
-    "   FOREIGN KEY (`museumName`) REFERENCES `museum` (`museumName`),"
+    "   FOREIGN KEY (`museumName`) REFERENCES `museum` (`museumName`) ON DELETE CASCADE,"
     "   FOREIGN KEY (`visitorEmail`) REFERENCES `visitor` (`email`) ON DELETE CASCADE,"
     "   CONSTRAINT CHK_Rating CHECK (Rating BETWEEN 1 AND 5)"
     ")")
@@ -97,7 +97,7 @@ TABLES['ticket'] = (
     "   `price` decimal(7,2) NOT NULL,"
     "   `purchaseTimeStamp` datetime NOT NULL,"
     "   PRIMARY KEY (`museumName`, `visitorEmail`),"
-    "   FOREIGN KEY (`museumName`) REFERENCES `museum` (`museumName`),"
+    "   FOREIGN KEY (`museumName`) REFERENCES `museum` (`museumName`) ON DELETE CASCADE,"
     "   FOREIGN KEY (`visitorEmail`) REFERENCES `visitor` (`email`) ON DELETE CASCADE"
     ")")
 
@@ -109,8 +109,8 @@ TABLES['exhibit'] = (
     "   `url` varchar(2083),"
     "   `curatorEmail` varchar(255) NOT NULL,"
     "   PRIMARY KEY (`museumName`, `exhibitName`),"
-    "   FOREIGN KEY (`museumName`) REFERENCES `museum` (`museumName`),"
-    "   FOREIGN KEY (`curatorEmail`) REFERENCES `visitor` (`email`)"
+    "   FOREIGN KEY (`museumName`) REFERENCES `museum` (`museumName`) ON DELETE CASCADE,"
+    "   FOREIGN KEY (`curatorEmail`) REFERENCES `visitor` (`email`) ON DELETE CASCADE"
     ")")
 
 # creating tables
