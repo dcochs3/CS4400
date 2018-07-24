@@ -369,7 +369,7 @@ def specificMuseum(museum_name):
 
     query1 = "SELECT * FROM museumdb.museum WHERE museumName = '{0}';".format(museumname)
     query = "SELECT exhibitName, year, url FROM museumdb.exhibit WHERE museumName = '{0}';".format(museumname)
-    curator_query = "SELECT * FROM visitor JOIN museum ON email=curatorEmail WHERE email='{0}'".format(visitor_email)
+    curator_query = "SELECT * FROM visitor JOIN museum ON email=curatorEmail WHERE email='{0}' AND museumName='{1}'".format(visitor_email, museumname)
     purchasedTicketQuery = "SELECT * FROM ticket WHERE visitorEmail = '{0}' AND museumName = '{1}';".format(visitor_email, museumname)
     print(curator_query)
     try:
@@ -746,7 +746,7 @@ def denyRequest(email):
 
     # there is no update to be done
     # remove the request from the curator request table
-    deleteQuery = "DELETE FROM museumdb.curator_request WHERE visitorEmail='{0}' AND museumName = '{1}';".format(email, museum_name)
+    deleteQuery = "DELETE FROM museumdb.curator_request WHERE visitorEmail='{0}';".format(email)
 
     query = "SELECT * FROM museumdb.curator_request;"
 
@@ -866,6 +866,7 @@ def actionDeleteMuseum(museum_name):
     error = request.args.get('error')
 
     query = "DELETE FROM museumdb.museum WHERE museumName='{0}';".format(museum_name)
+    print(query)
     try:
         cursor.execute(query)
         conn.commit()
@@ -873,7 +874,7 @@ def actionDeleteMuseum(museum_name):
     except Exception as e:
         query = "rollback;"
         cursor.execute(query)
-        error = "There was an error deleting the museum."
+        error = str(e)#"There was an error deleting the museum."
 
     return redirect(url_for('loggedin', error=error, isAdmin=1))
 
