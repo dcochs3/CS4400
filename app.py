@@ -846,7 +846,7 @@ def deleteAccount(email):
     del_query = "DELETE FROM visitor WHERE email = '{0}'".format(email)
     cursor.execute(del_query)
     conn.commit()
-    return render_template('login.html', error=None)
+    return redirect(url_for('welcome'))#render_template('login.html', error=None)
 
 @app.route('/actionDeleteMuseum/<museum_name>')
 def actionDeleteMuseum(museum_name):
