@@ -1,0 +1,74 @@
+Queries
+
+ADMIN
+"SELECT email FROM museumdb.admin WHERE email = '{0}' AND password = '{1}';".format(email, password)
+
+
+CURATOR_REQUEST
+"DELETE FROM museumdb.curator_request WHERE visitorEmail = '{0}';".format(email)
+
+"DELETE FROM museumdb.curator_request WHERE visitorEmail = '{0}' AND museumName = '{1}';".format(email, museum_name)
+
+"INSERT INTO curator_request VALUES ('{0}', '{1}');".format(museum_name, email)
+
+"SELECT * FROM museumdb.curator_request;"
+
+
+EXHIBIT
+"DELETE FROM exhibit WHERE exhibitName = '{0}' AND museumName = '{1}';".format(exhibit_name, museum_name)
+
+ "INSERT INTO exhibit VALUES ('{0}', '{1}', {2}, '{3}', '{4}');".format(museumname, exhibitname, year, link, curator_email)
+
+"SELECT exhibitName, year, url FROM museumdb.exhibit WHERE museumName = '{0}';".format(museumname)
+
+"SELECT museumName, COUNT(exhibitName) FROM exhibit GROUP BY museumName;"
+
+MUSEUM
+"DELETE FROM museumdb.museum WHERE museumName = '{0}';".format(museum_name)
+
+"INSERT into museumdb.museum values ('{0}', NULL);".format(museum_name)
+
+"SELECT curatorEmail FROM museumdb.museum WHERE museumName = '{0}';".format(museum_name)
+
+"SELECT * FROM museumdb.museum WHERE museumName = '{0}';".format(museum_name)
+
+"SELECT museumName FROM museum WHERE curatorEmail = '{0}';".format(visitorEmail)
+
+"SELECT museumName FROM museum;"
+
+"UPDATE museumdb.museum SET curatorEmail = '{0}' WHERE museumName = '{1}';".format(email, museum_name)
+
+
+REVIEW
+"DELETE FROM review WHERE museumName = '{0}' AND visitorEmail = '{1}';".format(museum_name, visitor_email)
+
+"INSERT INTO museumdb.review (museumName, visitorEmail, comment, rating) VALUES ('{0}', '{1}', '{2}', {3});".format(museum_name, visitor_email, comment, rating)
+
+"SELECT * FROM review WHERE visitorEmail = '{0}' AND museumName = '{1}';".format(visitor_email, museum_name)
+
+"SELECT * FROM museumdb.review WHERE museumName = '{0}';".format(museum_name)
+
+"SELECT * FROM review WHERE visitorEmail = '{0}';".format(visitor_email)
+
+"SELECT museumName, AVG(rating) FROM review GROUP BY museumName;"
+
+"UPDATE museumdb.review SET comment = '{0}', rating = {1} WHERE visitorEmail = '{2}' AND museumName = '{3}';".format(comment, rating, visitor_email, museum_name)
+
+TICKET
+"INSERT INTO museumdb.ticket (museumName, visitorEmail, price, purchaseTimeStamp) VALUES ('{0}', '{1}', {2}, '{3}');".format(museum_name, visitor_email, price, timestamp)
+
+"SELECT * FROM ticket WHERE visitorEmail = '{0}';".format(visitor_email)
+
+"SELECT * FROM ticket WHERE visitorEmail = '{0}' AND museumName = '{1}';".format(visitor_email, museumname)
+
+
+VISITOR
+"INSERT into visitor values ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}');".format(email, password, cardNumber, month, year, cvv, int(isCurator))
+
+"SELECT isCurator FROM museumdb.visitor WHERE email = '{0}';".format(email)
+
+"SELECT email FROM visitor WHERE email = '{0}' AND password = '{1}';".format(email, password)
+
+"SELECT * FROM visitor JOIN museum ON email = curatorEmail WHERE email = '{0}' AND museumName = '{1}'".format(visitor_email, museumname)
+
+"UPDATE museumdb.visitor SET isCurator = 1 WHERE email = '{0}';".format(email)
