@@ -29,13 +29,13 @@ try:
     conn = mysql.connector.connect(**config)
     cursor = conn.cursor()
 except Exception as e:
-    print(e.msg)
+    print(e)
 
 initDB = "CREATE DATABASE IF NOT EXISTS {}".format(databaseName)
 try:
     cursor.execute(initDB)
 except Exception as e:
-    print(str(e))
+    pass
 
 conn.database = databaseName
 
@@ -116,16 +116,9 @@ TABLES['exhibit'] = (
 # creating tables
 for name, ddl in TABLES.items():
     try:
-        print("Creating table {}: ".format(name), end='')
         cursor.execute(ddl)
     except mysql.connector.Error as err:
-        if err.errno == errorcode.ER_TABLE_EXISTS_ERROR:
-            print("already exists.")
-        else:
-            print(err.msg)
-    else:
-        print("OK")
-
+        continue
 
 #welcome page rendering
 @app.route('/')
@@ -185,7 +178,7 @@ def login():
             session.SESSION_EXPIRE_AT_BROWSER_CLOSE = True
             isAdmin = 1
     except Exception as e:
-        print(str(e))
+        print(e)
         query = "rollback;"
         cursor.execute(query)
         error = 'The email or password you have entered is incorrect.'
@@ -220,7 +213,7 @@ def loggedin():
     except Exception as e:
         query = "rollback;"
         cursor.execute(query)
-        print('error')
+        print(e)
 
     return render_template('home.html', museum_list=museum_list, no_museums=no_museums, museum_name=museumname, isCurator=isCurator, isAdmin=isAdmin, email=email, error=error)
 
@@ -303,7 +296,7 @@ def register():
     try:
         cursor.execute(query)
     except Exception as e:
-        print(e.msg)
+        print(e)
         query = "rollback;"
         cursor.execute(query)
 
@@ -334,10 +327,10 @@ def allMuseums():
             error = 'No museums currently exist.'
             return redirect(url_for('loggedin', error=error, isCurator=isCurator))
 
-    except:
+    except Exception as e:
         query = "rollback;"
         cursor.execute(query)
-        print('error')
+        print(e)
 
     return render_template('allMuseums.html', museum_list=museum_list, isCurator=isCurator, rating_list=rating_list)
 
@@ -371,7 +364,7 @@ def specificMuseum(museum_name):
     query = "SELECT exhibitName, year, url FROM museumdb.exhibit WHERE museumName = '{0}';".format(museumname)
     curator_query = "SELECT * FROM visitor JOIN museum ON email=curatorEmail WHERE email='{0}' AND museumName='{1}'".format(visitor_email, museumname)
     purchasedTicketQuery = "SELECT * FROM ticket WHERE visitorEmail = '{0}' AND museumName = '{1}';".format(visitor_email, museumname)
-    print(curator_query)
+
     try:
         cursor.execute(query1)
         museum_exists = cursor.fetchone()
@@ -388,9 +381,8 @@ def specificMuseum(museum_name):
         cursor.execute(curator_query)
         isCuratorList = cursor.fetchall()
         isCurator = len(isCuratorList) > 0
-        print(isCuratorList)
-    except:
-        print('Error')
+    except Exception as e:
+        print(e)
 
     if museum_exists is None:
         # that museum entered does not exist in the database
@@ -442,8 +434,8 @@ def reviewMuseum(museum_name):
         else:
             museumReviewed = 1
 
-    except:
-        print('Error')
+    except Exception as e:
+        print(e)
 
     return render_template('writeReview.html', error=error, museum_name=museum_name, museumReviewed=museumReviewed, review_info=review_info)
 
@@ -467,7 +459,6 @@ def newReview(museum_name):
     try:
         cursor.execute(purchasedTicket)
         ticket = cursor.fetchone()
-        print(ticket)
         if ticket is not None:
             # you've already bought a ticket
             # can review
@@ -540,8 +531,8 @@ def viewReviews(museum_name):
     try:
         cursor.execute(query)
         reviews = cursor.fetchall()
-    except:
-        print('Error')    
+    except Exception as e:
+        print(e)    
     return render_template('viewReviews.html', reviews=reviews, museum_name=museum_name)
 
 @app.route('/removeExhibit/<museum_name>/<exhibit_name>', methods=['POST'])
@@ -656,8 +647,7 @@ def curatorRequested(museum_name, email):
 		conn.commit
 		error = "Request successfully submitted!"
 	except Exception as e:
-		error = str(e)
-		#error = "You are already a curator for that museum!" 
+		error = "You are already a curator for that museum!" 
 	return redirect(url_for('curatorRequest', email=email, error=error))
 
 # ADMIN FUNCTIONS (DANA)
@@ -672,7 +662,7 @@ def reviewCuratorRequests():
         cursor.execute(query)
         curator_requests = cursor.fetchall()
     except Exception as e:
-        print(e.msg)
+        print(e)
         query = "rollback;"
         cursor.execute(query)
         error = 'There was an error retrieving curator requests.'
@@ -706,7 +696,6 @@ def approveRequest(email):
         cursor.execute(exists)
         curators = cursor.fetchone()
         curators = curators[0]
-        print(curators)
         if curators is not None:
             curators
             cursor.execute(query)
@@ -728,7 +717,7 @@ def approveRequest(email):
             curator_requests = cursor.fetchall()
 
     except Exception as e:
-        print(e.msg)
+        print(e)
         query = "rollback;"
         cursor.execute(query)
         query2 = "SELECT * FROM museumdb.curator_request;"
@@ -759,7 +748,7 @@ def denyRequest(email):
         curator_requests = cursor.fetchall()
 
     except Exception as e:
-        print(e.msg)
+        print(e)
         query = "rollback;"
         cursor.execute(query)
         query2 = "SELECT * FROM museumdb.curator_request;"
@@ -788,7 +777,7 @@ def addMuseum():
 
         error = "Museum successfully added."
     except Exception as e:
-        print(e.msg)
+        print(e)
         query = "rollback;"
         cursor.execute(query)
 
@@ -826,7 +815,6 @@ def deleteMuseum():
 @app.route('/typeDeleteMuseum', methods=["POST"])
 def typeDeleteMuseum():
     museum_name = request.form.get('museumname')
-    print(museum_name)
     error = request.args.get('error')
 
     # check the museum they typed exists
@@ -866,7 +854,6 @@ def actionDeleteMuseum(museum_name):
     error = request.args.get('error')
 
     query = "DELETE FROM museumdb.museum WHERE museumName='{0}';".format(museum_name)
-    print(query)
     try:
         cursor.execute(query)
         conn.commit()
@@ -874,7 +861,7 @@ def actionDeleteMuseum(museum_name):
     except Exception as e:
         query = "rollback;"
         cursor.execute(query)
-        error = str(e)#"There was an error deleting the museum."
+        error = "There was an error deleting the museum."
 
     return redirect(url_for('loggedin', error=error, isAdmin=1))
 
