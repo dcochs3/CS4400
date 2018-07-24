@@ -632,23 +632,24 @@ def myReviews():
 
 @app.route('/curatorRequest/<email>/<error>')
 def curatorRequest(email, error):
-	museum_query = "SELECT museumName FROM museum"
-	cursor.execute(museum_query)
-	museum_list = cursor.fetchall()
-	conn.commit()
-	return render_template('curatorRequest.html', museum_list=museum_list, email=email, error=error)
+    # error = request.args.get('error')
+    museum_query = "SELECT museumName FROM museumdb.museum;"
+    cursor.execute(museum_query)
+    museum_list = cursor.fetchall()
+    conn.commit()
+    return render_template('curatorRequest.html', museum_list=museum_list, email=email, error=error)
 
 @app.route('/postCuratorRequest/<museum_name>/<email>')
 def curatorRequested(museum_name, email):
-	# if TODO:
-	insert_query = "INSERT INTO curator_request VALUES ('{0}', '{1}');".format(museum_name, email)
-	try:
-		cursor.execute(insert_query)
-		conn.commit
-		error = "Request successfully submitted!"
-	except Exception as e:
-		error = "You are already a curator for that museum!" 
-	return redirect(url_for('curatorRequest', email=email, error=error))
+    # if TODO:
+    insert_query = "INSERT INTO curator_request VALUES ('{0}', '{1}');".format(museum_name, email)
+    try:
+        cursor.execute(insert_query)
+        conn.commit
+        error = "Request successfully submitted!"
+    except Exception as e:
+        error = "You are already a curator for that museum!" 
+    return redirect(url_for('curatorRequest', email=email, error=error))
 
 # ADMIN FUNCTIONS (DANA)
 # review curator requests

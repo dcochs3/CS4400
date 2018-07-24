@@ -58,7 +58,6 @@
                                     <!-- if isCurator -->
                                     {% if isCurator %}
                                         <td>
-                                            <!-- TODO action -->
                                             <form method=POST action='/removeExhibit/{{museum_name}}/{{exhibit[0]}}'>
                                                 <div style="text-align:center;">
                                                     <button type="submit" name="remove-exhibit-button" class="btn" id="remove-exhibit-button" value="Remove">Remove</button>
@@ -99,7 +98,6 @@
                         </div>
                     </form>
 
-                    <!-- TODO -->
                     <!-- if isCurator -->
                     {% if isCurator %}
                         <div class="form-group">
@@ -282,7 +280,6 @@
                                     </button>
                                 </div>
 
-                                <!-- TO DO: ACTION -->
                                 <form method=POST action='/addExhibit/{{museum_name}}'>
                                     <div class="modal-body">
                                         <div class="form-group">

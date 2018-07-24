@@ -45,7 +45,6 @@
                                     </td>
                                     <td>
                                         {% for rating in rating_list if rating|first == museum|first %}
-                                                <!-- TODO: remove trailing zeros? -->
                                                 {{ rating[1] }} / 5
                                             {% else %}
                                                 -- / 5
